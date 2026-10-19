@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>One-Variable Data Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -28,6 +32,9 @@
   --amber:#f5a35a; --amber-tint:rgba(245,163,90,.14); color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+img{max-width:100%}
 body{
   background-color:var(--paper);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
@@ -142,6 +149,8 @@ input[type=text],input[type=number]{font:1rem var(--f-body);padding:8px 10px;bor
 footer{font-size:.85rem;color:var(--ink-soft);padding-bottom:32px}
 @media (prefers-reduced-motion:no-preference){.fb{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(-3px);opacity:.4}to{transform:none;opacity:1}}}
 </style>
+</head>
+<body>
 
 <header class="top"><div class="wrap">
   <div class="brand">
@@ -791,3 +800,5 @@ progress.mission = Object.keys(missionDone).length;
 renderScore(); renderSkillChips(); nextQuestion(); renderMission();
 show((location.hash || '#learn').slice(1));
 </script>
+
+</body></html>
