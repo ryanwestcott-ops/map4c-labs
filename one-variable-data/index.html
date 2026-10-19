@@ -1,0 +1,793 @@
+<title>One-Variable Data Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: graph-paper lab sheet. Sticky tab bar, one working column; Desmos lab splits into missions + calculator. Palette borrows Desmos' own curve colours. */
+:root{
+  --paper:#f7f9fb; --surface:#ffffff; --ink:#18222e; --ink-soft:#56657a;
+  --grid:rgba(45,112,179,.07); --rule:#d9e1ea;
+  --blue:#2d70b3; --blue-tint:rgba(45,112,179,.10);
+  --red:#c74440; --green:#2f7d3c; --green-tint:rgba(56,140,70,.12);
+  --amber:#b85c00; --amber-tint:rgba(250,126,25,.14);
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#10151b; --surface:#18202a; --ink:#e7edf4; --ink-soft:#9fb0c2;
+  --grid:rgba(106,166,232,.06); --rule:#2a3542;
+  --blue:#6aa6e8; --blue-tint:rgba(106,166,232,.14);
+  --red:#e57a74; --green:#6cc77a; --green-tint:rgba(108,199,122,.14);
+  --amber:#f5a35a; --amber-tint:rgba(245,163,90,.14); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#10151b; --surface:#18202a; --ink:#e7edf4; --ink-soft:#9fb0c2;
+  --grid:rgba(106,166,232,.06); --rule:#2a3542;
+  --blue:#6aa6e8; --blue-tint:rgba(106,166,232,.14);
+  --red:#e57a74; --green:#6cc77a; --green-tint:rgba(108,199,122,.14);
+  --amber:#f5a35a; --amber-tint:rgba(245,163,90,.14); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:800}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+a{color:var(--blue)}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+
+/* header + tabs */
+header.top{background:var(--surface);border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding-block:20px 14px}
+.brand{display:flex;gap:14px;align-items:center}
+.brand svg{flex:none}
+.score{display:flex;gap:10px;align-items:center;font-size:.9rem;color:var(--ink-soft)}
+.score b{font-family:var(--f-display);font-size:1.4rem;color:var(--ink);font-variant-numeric:tabular-nums}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--rule)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+nav.tabs button{font:600 1rem var(--f-display);background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-soft);padding:12px 14px 10px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
+nav.tabs button:hover{color:var(--ink)}
+main{padding-block:28px 64px}
+section.view{display:grid;gap:22px}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:20px;display:grid;gap:12px;min-width:0}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.grid3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.lead{font-size:1.08rem;max-width:65ch;color:var(--ink-soft)}
+.types{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.type{border-left:4px solid var(--c);padding:4px 0 4px 12px;display:grid;gap:4px}
+.type h3{color:var(--c)}
+.type p{font-size:.95rem}
+.type .ex{font-size:.88rem;color:var(--ink-soft)}
+.callout{background:var(--blue-tint);border-radius:8px;padding:12px 14px;font-size:.95rem}
+.gfig{display:grid;gap:6px;min-width:0}
+.gfig svg{width:100%;height:auto;max-width:100%}
+.gfig .cap{font-size:.9rem}
+.gfig .cap b{font-family:var(--f-display)}
+table.ft{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+table.ft th,table.ft td{border:1px solid var(--rule);padding:6px 12px;text-align:left}
+table.ft th{background:var(--blue-tint);font-weight:700}
+.tablewrap{overflow-x:auto}
+ul.starters{margin:0;padding-left:20px;display:grid;gap:4px}
+.cheat{display:grid;gap:8px}
+.cheat div{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr);gap:12px;align-items:baseline;border-bottom:1px dashed var(--rule);padding-bottom:8px}
+@media (max-width:520px){.cheat div{grid-template-columns:1fr;gap:2px}}
+
+/* buttons + inputs */
+.btn{font:700 .95rem var(--f-body);border-radius:8px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);padding:9px 14px;cursor:pointer}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:var(--surface)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+input[type=text],input[type=number]{font:1rem var(--f-body);padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);width:110px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:600 .9rem var(--f-body);border:1px solid var(--rule);background:var(--surface);color:var(--ink-soft);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.fb{border-radius:8px;padding:10px 12px;font-size:.95rem}
+.fb.ok{background:var(--green-tint);color:var(--ink)}
+.fb.ok b{color:var(--green)}
+.fb.no{background:var(--amber-tint);color:var(--ink)}
+.fb.no b{color:var(--amber)}
+.mc{display:grid;gap:8px}
+.mc button{text-align:left;font:1rem var(--f-body);background:var(--paper);border:1px solid var(--rule);color:var(--ink);border-radius:8px;padding:10px 12px;cursor:pointer}
+.mc button:hover:not(:disabled){border-color:var(--blue)}
+.mc button.right{border-color:var(--green);background:var(--green-tint)}
+.mc button.wrong{border-color:var(--amber);background:var(--amber-tint)}
+
+/* code chips */
+.code{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
+.code pre{margin:0;font-family:var(--f-mono);font-size:.88rem;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:7px 10px;overflow-x:auto;max-width:100%;flex:1 1 auto;min-width:0;user-select:all}
+.code .btn{padding:6px 10px;font-size:.85rem}
+
+/* desmos lab */
+.lab{display:grid;gap:20px;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:start}
+@media (max-width:860px){.lab{grid-template-columns:minmax(0,1fr)}}
+.calcbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);display:grid;gap:10px}
+@media (max-width:860px){.calcbox{position:static;order:-1}}
+#calc{height:500px;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+@media (max-width:560px){#calc{height:400px}}
+#calcFallback{padding:24px;display:grid;gap:12px;align-content:center;height:100%}
+.mission ol{margin:0;padding-left:22px;display:grid;gap:8px}
+.data{font-family:var(--f-mono);font-size:.9rem;background:var(--paper);border:1px dashed var(--rule);border-radius:6px;padding:8px 10px;overflow-wrap:anywhere}
+.q{display:grid;gap:8px;padding-top:12px;border-top:1px dashed var(--rule)}
+.q label{font-weight:700}
+
+/* practice */
+.prac{display:grid;gap:20px;grid-template-columns:minmax(0,1fr) 260px;align-items:start}
+@media (max-width:860px){.prac{grid-template-columns:minmax(0,1fr)}}
+.qcard{min-height:260px}
+.qcard .stim svg{width:100%;max-width:460px;height:auto}
+.vals{display:flex;flex-wrap:wrap;gap:6px}
+.vals span{font-family:var(--f-mono);font-size:.9rem;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-variant-numeric:tabular-nums}
+.skills{display:grid;gap:10px}
+.skill{display:grid;gap:4px}
+.skill .top{display:flex;justify-content:space-between;font-size:.9rem}
+.skill .n{font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.dots{display:flex;flex-wrap:wrap;gap:3px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--rule)}
+.dots i.on{background:var(--red)}
+footer{font-size:.85rem;color:var(--ink-soft);padding-bottom:32px}
+@media (prefers-reduced-motion:no-preference){.fb{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(-3px);opacity:.4}to{transform:none;opacity:1}}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><line x1="4" y1="38" x2="40" y2="38" stroke="var(--ink-soft)" stroke-width="2"/><circle cx="11" cy="32" r="4" fill="var(--red)"/><circle cx="22" cy="32" r="4" fill="var(--red)"/><circle cx="22" cy="23" r="4" fill="var(--red)"/><circle cx="22" cy="14" r="4" fill="var(--red)"/><circle cx="33" cy="32" r="4" fill="var(--red)"/><circle cx="33" cy="23" r="4" fill="var(--red)"/></svg>
+    <div><div class="eyebrow">MAP4C · Mr. Westcott · Data Management</div><h1>One-Variable Data Lab</h1></div>
+  </div>
+  <div class="score" aria-live="polite"><span>Correct answers</span><b id="totalScore">0</b></div>
+</div></header>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap" role="tablist">
+  <button role="tab" id="tab-learn" data-view="learn" aria-selected="true">1 · Review</button>
+  <button role="tab" id="tab-desmos" data-view="desmos" aria-selected="false">2 · Desmos Lab</button>
+  <button role="tab" id="tab-practice" data-view="practice" aria-selected="false">3 · Practice</button>
+</div></nav>
+
+<main class="wrap">
+
+<!-- REVIEW -->
+<section class="view" id="view-learn" aria-labelledby="tab-learn">
+  <div class="card">
+    <h2>One-variable data</h2>
+    <p class="lead">One fact is recorded about each person or thing. Ask yourself: <b>how many facts do I know about each one?</b> One fact means one-variable data.</p>
+    <p>Example: 20 students each report their number of siblings. The variable is <b>number of siblings</b>. Two-variable data (like height <i>and</i> shoe size) comes later.</p>
+  </div>
+
+  <div class="card">
+    <h2>Types of data</h2>
+    <div class="types">
+      <div class="type" style="--c:var(--blue)"><h3>Categorical</h3><p>Labels or groups.</p><p class="ex">favourite sport, phone brand, home form</p></div>
+      <div class="type" style="--c:var(--red)"><h3>Discrete</h3><p>Counted. Only certain values, with gaps.</p><p class="ex">siblings, goals scored, pets</p></div>
+      <div class="type" style="--c:var(--green)"><h3>Continuous</h3><p>Measured. Any value in a range.</p><p class="ex">height, time, mass, temperature</p></div>
+    </div>
+    <div class="callout"><b>Quick test:</b> could the value be 2.5 or 2.57? If yes, it's continuous. If you count it, it's discrete.</div>
+  </div>
+
+  <div class="card">
+    <h2>Choosing the right graph</h2>
+    <div class="grid3">
+      <figure class="gfig" style="margin:0"><div id="mini-bar"></div><figcaption class="cap"><b>Bar graph</b> for categorical data. Bars do not touch.</figcaption></figure>
+      <figure class="gfig" style="margin:0"><div id="mini-dot"></div><figcaption class="cap"><b>Dot plot</b> for discrete data with a small range. One dot per value.</figcaption></figure>
+      <figure class="gfig" style="margin:0"><div id="mini-hist"></div><figcaption class="cap"><b>Histogram</b> for continuous data. Equal intervals; bars touch.</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Tally and frequency</h2>
+      <p>A tally counts as you go. Every fifth mark crosses the four before it. The frequency is the count.</p>
+      <div class="tablewrap"><table class="ft" id="tallyDemo"><thead><tr><th>Home form</th><th>Tally</th><th>Frequency</th></tr></thead><tbody></tbody></table></div>
+      <p style="font-size:.92rem;color:var(--ink-soft)">For continuous data, group values into equal intervals such as "10 to under 20". A value of exactly 20 goes in "20 to under 30".</p>
+    </div>
+    <div class="card">
+      <h2>Descriptive statements</h2>
+      <p>Use real numbers from the data.</p>
+      <ul class="starters">
+        <li>The most common ___ was ___ (___ people).</li>
+        <li>___ out of ___ students ...</li>
+        <li>Values ranged from ___ to ___.</li>
+        <li>___ had about twice as many as ___.</li>
+        <li>One value, ___, is far from the rest.</li>
+      </ul>
+      <div class="callout">Example: "8 of the 20 students have exactly 1 sibling, which is the most common answer."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Desmos cheat sheet</h2>
+    <div class="cheat">
+      <div><code>S=[0,1,1,2,3]</code><span>Make a list. Square brackets, commas between values.</span></div>
+      <div><code>dotplot(S)</code><span>Dot plot of list S.</span></div>
+      <div><code>histogram(H,10)</code><span>Histogram of list H with intervals 10 wide.</span></div>
+      <div><code>length(S)</code><span>How many values are in the list. Good for checking you typed them all.</span></div>
+      <div><span class="mono">Wrench icon</span><span>Graph settings: label axes, change the window.</span></div>
+    </div>
+    <div class="row"><button class="btn primary" data-goto="desmos">Go to the Desmos Lab</button></div>
+  </div>
+</section>
+
+<!-- DESMOS LAB -->
+<section class="view" id="view-desmos" aria-labelledby="tab-desmos" hidden>
+  <div class="lab">
+    <div class="card mission" id="missionCard">
+      <div class="chips" id="missionChips" role="group" aria-label="Missions"></div>
+      <div id="missionBody" style="display:grid;gap:14px"></div>
+    </div>
+    <div class="calcbox">
+      <div id="calc"></div>
+      <div class="row" id="calcTools">
+        <button class="btn" id="clearCalc">Clear graph</button>
+        <a class="btn" href="https://www.desmos.com/calculator" target="_blank" rel="noopener" style="text-decoration:none">Open Desmos in new tab</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section class="view" id="view-practice" aria-labelledby="tab-practice" hidden>
+  <div class="prac">
+    <div style="display:grid;gap:14px;min-width:0">
+      <div class="chips" id="skillChips" role="group" aria-label="Choose a skill"></div>
+      <div class="card qcard" id="qcard" aria-live="polite"></div>
+    </div>
+    <aside class="card">
+      <h3>Your progress</h3>
+      <p style="font-size:.88rem;color:var(--ink-soft)">One dot per correct answer. Aim for 5 in each skill.</p>
+      <div class="skills" id="skillList"></div>
+      <button class="btn" id="resetProgress">Reset progress</button>
+      <p id="resetConfirm" class="row" hidden><span style="font-size:.9rem">Erase your dots?</span><button class="btn" id="resetYes">Erase</button><button class="btn" id="resetNo">Keep</button></p>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">Self-check practice. Nothing you enter is sent anywhere. Progress is saved only in this browser.</footer>
+
+<script>
+/* ---------- settings ---------- */
+// Desmos API key. The public demo key works for testing; request a free key from Desmos for long-term classroom use.
+const DESMOS_API_KEY = 'dcb31709b452b1cf9dc26972add0fda6';
+const DESMOS_VERSION = 'v1.10';
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const el = (tag, attrs = {}, html = '') => { const e = document.createElement(tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (html) e.innerHTML = html; return e; };
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const counts = (data, keys) => keys.map(k => data.filter(v => v === k).length);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- storage (best effort) ---------- */
+const SKILLS = [
+  {id:'type', name:'Type of data'},
+  {id:'graph', name:'Choose the graph'},
+  {id:'dot', name:'Read a dot plot'},
+  {id:'tally', name:'Tally to frequency'},
+  {id:'group', name:'Grouped frequency'},
+  {id:'tf', name:'True or false'}
+];
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem('ovdl-progress') || '{}') || {}; } catch (e) { progress = {}; }
+SKILLS.forEach(s => { if (!progress[s.id]) progress[s.id] = {c:0, a:0}; });
+if (!progress.mission) progress.mission = 0;
+const save = () => { try { localStorage.setItem('ovdl-progress', JSON.stringify(progress)); } catch (e) {} };
+function renderScore() {
+  const t = SKILLS.reduce((s, k) => s + progress[k.id].c, 0) + (progress.mission || 0);
+  $('#totalScore').textContent = t;
+  const list = $('#skillList'); if (!list) return;
+  list.innerHTML = '';
+  SKILLS.forEach(s => {
+    const p = progress[s.id];
+    const d = el('div', {class:'skill'});
+    d.innerHTML = `<div class="top"><span>${s.name}</span><span class="n">${p.c} / ${p.a}</span></div><div class="dots">${Array.from({length: Math.max(5, p.c)}, (_, i) => `<i class="${i < p.c ? 'on' : ''}"></i>`).join('')}</div>`;
+    list.appendChild(d);
+  });
+}
+
+/* ---------- SVG graph makers ---------- */
+function dotplotSVG(vals, cnts, opts = {}) {
+  const W = opts.w || 360, step = Math.min(56, (W - 50) / vals.length), r = Math.min(7, step / 2 - 2), gap = r * 2 + 3;
+  const maxc = Math.max(...cnts), H = 70 + maxc * gap;
+  const base = H - 44, x0 = 30 + step / 2;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label || 'Dot plot')}">`;
+  s += `<line x1="18" x2="${W - 12}" y1="${base}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+  vals.forEach((v, i) => {
+    const x = x0 + i * step;
+    s += `<line x1="${x}" x2="${x}" y1="${base}" y2="${base + 5}" stroke="var(--ink-soft)"/>`;
+    s += `<text x="${x}" y="${base + 20}" text-anchor="middle" font-size="12" fill="var(--ink-soft)">${v}</text>`;
+    for (let k = 0; k < cnts[i]; k++) s += `<circle cx="${x}" cy="${base - r - 3 - k * gap}" r="${r}" fill="var(--red)"/>`;
+  });
+  if (opts.label) s += `<text x="${W / 2}" y="${H - 6}" text-anchor="middle" font-size="12.5" fill="var(--ink)">${esc(opts.label)}</text>`;
+  return s + '</svg>';
+}
+function histSVG(edges, freqs, opts = {}) {
+  const W = opts.w || 360, H = 190, base = 140, left = 26, right = W - 16, maxf = Math.max(...freqs);
+  const sx = v => left + (v - edges[0]) / (edges.at(-1) - edges[0]) * (right - left), sy = f => base - f / maxf * 100;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label || 'Histogram')}">`;
+  freqs.forEach((f, i) => {
+    s += `<rect x="${sx(edges[i])}" y="${sy(f)}" width="${sx(edges[i + 1]) - sx(edges[i])}" height="${base - sy(f)}" fill="var(--green)" fill-opacity=".55" stroke="var(--ink)" stroke-width="1"/>`;
+    s += `<text x="${(sx(edges[i]) + sx(edges[i + 1])) / 2}" y="${sy(f) - 5}" text-anchor="middle" font-size="12" fill="var(--ink)">${f}</text>`;
+  });
+  edges.forEach(e => s += `<text x="${sx(e)}" y="${base + 17}" text-anchor="middle" font-size="12" fill="var(--ink-soft)">${e}</text>`);
+  s += `<line x1="${left - 6}" x2="${right + 6}" y1="${base}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+  if (opts.label) s += `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" font-size="12.5" fill="var(--ink)">${esc(opts.label)}</text>`;
+  return s + '</svg>';
+}
+function barSVG(cats, freqs, opts = {}) {
+  const W = opts.w || 360, H = 190, base = 140, left = 20, right = W - 12, maxf = Math.max(...freqs);
+  const band = (right - left) / cats.length, bw = band * 0.6, sy = f => base - f / maxf * 100;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label || 'Bar graph')}">`;
+  cats.forEach((c, i) => {
+    const x = left + i * band + (band - bw) / 2;
+    s += `<rect x="${x}" y="${sy(freqs[i])}" width="${bw}" height="${base - sy(freqs[i])}" fill="var(--blue)" fill-opacity=".75"/>`;
+    s += `<text x="${x + bw / 2}" y="${sy(freqs[i]) - 5}" text-anchor="middle" font-size="12" fill="var(--ink)">${freqs[i]}</text>`;
+    s += `<text x="${x + bw / 2}" y="${base + 17}" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${esc(c)}</text>`;
+  });
+  s += `<line x1="${left - 6}" x2="${right}" y1="${base}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+  if (opts.label) s += `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" font-size="12.5" fill="var(--ink)">${esc(opts.label)}</text>`;
+  return s + '</svg>';
+}
+function tallySVG(n) {
+  const groups = Math.floor(n / 5), rest = n % 5, gw = 34, W = Math.max(20, groups * gw + rest * 7 + 6), H = 26;
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="tally of ${n}">`;
+  for (let g = 0; g < groups; g++) {
+    const x = 4 + g * gw;
+    for (let k = 0; k < 4; k++) s += `<line x1="${x + k * 6}" x2="${x + k * 6}" y1="3" y2="23" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>`;
+    s += `<line x1="${x - 3}" x2="${x + 21}" y1="20" y2="6" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>`;
+  }
+  for (let k = 0; k < rest; k++) { const x = 4 + groups * gw + k * 7; s += `<line x1="${x}" x2="${x}" y1="3" y2="23" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>`; }
+  return s + '</svg>';
+}
+
+/* ---------- review page visuals ---------- */
+$('#mini-bar').innerHTML = barSVG(['Hockey','Soccer','Basket','Other'], [7, 5, 9, 3], {label:'Favourite sport', w:300});
+$('#mini-dot').innerHTML = dotplotSVG([0,1,2,3,4], [4,8,5,2,1], {label:'Number of siblings', w:300});
+$('#mini-hist').innerHTML = histSVG([0,10,20,30,40,50], [4,10,6,3,1], {label:'Commute time (min)', w:300});
+(function () {
+  const rows = [['12A',4],['12B',6],['12C',2],['12D',8]];
+  $('#tallyDemo tbody').innerHTML = rows.map(([f, n]) => `<tr><td>${f}</td><td>${tallySVG(n)}</td><td>${n}</td></tr>`).join('');
+})();
+
+/* ---------- tabs ---------- */
+const VIEWS = ['learn', 'desmos', 'practice'];
+function show(view) {
+  if (!VIEWS.includes(view)) view = 'learn';
+  VIEWS.forEach(v => {
+    $('#view-' + v).hidden = v !== view;
+    $('#tab-' + v).setAttribute('aria-selected', v === view ? 'true' : 'false');
+  });
+  if (view === 'desmos') initDesmos();
+  if (location.hash !== '#' + view) history.replaceState(null, '', '#' + view);
+  window.scrollTo({top: 0});
+}
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => show(b.dataset.goto)));
+
+/* ---------- copy ---------- */
+function copyText(btn, text, pre) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = t, 1200); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Press Ctrl+C'; setTimeout(() => btn.textContent = 'Copy', 1800); };
+  try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+}
+// plain typing → Desmos LaTeX (named functions need \operatorname, brackets need \left \right)
+const toLatex = t => t
+  .replace(/\b(dotplot|histogram|length)\b/g, '\\operatorname{$1}')
+  .replace(/\(/g, '\\left(').replace(/\)/g, '\\right)')
+  .replace(/\[/g, '\\left[').replace(/\]/g, '\\right]');
+function codeChip(text, opts = {}) {
+  const wrap = el('div', {class:'code'});
+  const pre = el('pre'); pre.textContent = text;
+  const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Copy';
+  b.addEventListener('click', () => copyText(b, text, pre));
+  wrap.append(pre, b);
+  if (opts.send) {
+    const s = el('button', {class:'btn', type:'button', 'data-send':'1'}); s.textContent = 'Put in Desmos';
+    s.addEventListener('click', () => { if (calc) { calc.setExpression({id: 'auto' + Math.random().toString(36).slice(2, 7), latex: toLatex(text)}); s.textContent = 'Added'; setTimeout(() => s.textContent = 'Put in Desmos', 1200); } });
+    wrap.append(s);
+  }
+  return wrap;
+}
+
+/* ---------- desmos ---------- */
+let calc = null, desmosState = 'idle';
+function initDesmos() {
+  if (desmosState !== 'idle') return;
+  desmosState = 'loading';
+  const box = $('#calc');
+  box.innerHTML = '<div id="calcFallback"><p class="eyebrow">Loading Desmos…</p></div>';
+  const s = document.createElement('script');
+  s.src = `https://www.desmos.com/api/${DESMOS_VERSION}/calculator.js?apiKey=${DESMOS_API_KEY}`;
+  s.onload = () => {
+    if (!window.Desmos) return desmosFail();
+    box.innerHTML = '';
+    calc = Desmos.GraphingCalculator(box, {keypad: true, expressions: true, settingsMenu: true, border: false, expressionsCollapsed: false});
+    desmosState = 'ready';
+    renderMission();
+  };
+  s.onerror = desmosFail;
+  document.head.appendChild(s);
+  setTimeout(() => { if (desmosState === 'loading') desmosFail(); }, 8000);
+}
+function desmosFail() {
+  if (desmosState === 'ready' || desmosState === 'failed') return;
+  desmosState = 'failed';
+  $('#calc').innerHTML = `<div id="calcFallback"><h3>Use Desmos in a new tab</h3><p>The live calculator can't load on this page. Open Desmos, follow the steps on the left, then answer the questions here.</p><p><a class="btn primary" style="text-decoration:none;display:inline-block" href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Open desmos.com/calculator</a></p><p style="font-size:.9rem;color:var(--ink-soft)">Tip: use the Copy buttons, then paste into Desmos.</p></div>`;
+  $('#clearCalc').hidden = true;
+  renderMission();
+}
+$('#clearCalc').addEventListener('click', () => { if (calc) calc.setBlank(); });
+
+function topArgs(latex, fn) {
+  const i = latex.indexOf(fn); if (i < 0) return null;
+  let j = latex.indexOf('\\left(', i); if (j < 0) return null;
+  j += 6; let depth = 0, cur = '', out = [];
+  for (; j < latex.length; j++) {
+    if (latex.startsWith('\\right)', j) && depth === 0) { out.push(cur); return out; }
+    const c = latex[j];
+    if ('([{'.includes(c)) depth++;
+    if (')]}'.includes(c)) depth--;
+    if (c === ',' && depth === 0) { out.push(cur); cur = ''; continue; }
+    cur += c;
+  }
+  return null;
+}
+function listValueOf(latex) {
+  return new Promise(res => {
+    let h; try { h = calc.HelperExpression({latex}); } catch (e) { return res([]); }
+    let finished = false;
+    const finish = v => { if (finished) return; finished = true; try { h.unobserve('listValue'); } catch (e) {} res(Array.isArray(v) ? v : []); };
+    h.observe('listValue', () => { if (Array.isArray(h.listValue)) finish(h.listValue); });
+    setTimeout(() => finish(h.listValue), 1500);
+  });
+}
+const sameData = (a, b) => { if (a.length !== b.length) return false; const x = a.slice().sort((p, q) => p - q), y = b.slice().sort((p, q) => p - q); return x.every((v, i) => Math.abs(v - y[i]) < 1e-9); };
+async function checkGraph(m, out) {
+  out.className = 'fb'; out.hidden = false; out.textContent = 'Checking your graph…';
+  const exprs = calc.getExpressions().filter(e => e.type === 'expression' && e.latex);
+  const withFn = exprs.filter(e => e.latex.includes(m.fn));
+  if (!withFn.length) { out.className = 'fb no'; out.innerHTML = `<b>Not yet.</b> I can't find <code>${m.fn}( )</code> in your expressions. Add a new line like <code>${m.fn === 'dotplot' ? 'dotplot(' + m.list + ')' : 'histogram(' + m.list + ',10)'}</code>.`; return false; }
+  for (const e of withFn) {
+    const args = topArgs(e.latex, m.fn); if (!args) continue;
+    const vals = await listValueOf(args[0]);
+    if (sameData(vals, m.data)) {
+      if (m.fn === 'histogram') {
+        const w = args[1] ? await new Promise(res => { const h = calc.HelperExpression({latex: args[1]}); setTimeout(() => res(h.numericValue), 700); }) : null;
+        if (w !== 10) { out.className = 'fb no'; out.innerHTML = `<b>Close.</b> Your data is right. Set the interval width to 10: <code>histogram(${esc(m.list)},10)</code>.`; return false; }
+      }
+      out.className = 'fb ok'; out.innerHTML = `<b>Graph checked.</b> Your ${m.fn === 'dotplot' ? 'dot plot' : 'histogram'} uses all ${m.data.length} values correctly. Now answer the questions.`;
+      return true;
+    }
+    if (vals.length && vals.length !== m.data.length) { out.className = 'fb no'; out.innerHTML = `<b>Check your list.</b> It has ${vals.length} values but the data has ${m.data.length}. Look for a missing or extra number.`; return false; }
+  }
+  out.className = 'fb no'; out.innerHTML = `<b>Almost.</b> Your ${m.fn} is there, but its list doesn't match the data. Compare your numbers to the data one by one.`;
+  return false;
+}
+
+/* ---------- missions ---------- */
+const MISSIONS = [
+  {
+    title: 'Mission 1: Your first dot plot', short: 'M1 · Guided',
+    intro: 'Twenty students reported their number of siblings. Follow the steps to build a dot plot.',
+    list: 'S', fn: 'dotplot',
+    data: [0,1,1,2,1,3,0,2,1,1,4,2,0,1,2,1,3,1,0,2],
+    steps: [
+      ['Make a list called S. Copy this line into the first expression box.', 'S=[0,1,1,2,1,3,0,2,1,1,4,2,0,1,2,1,3,1,0,2]'],
+      ['On the next line, graph it.', 'dotplot(S)'],
+      ['Check you typed all 20 values. Desmos shows the answer beside this line.', 'length(S)'],
+      ['If you can\'t see the dots, use the zoom buttons or the home button (top right of the graph).', null]
+    ],
+    qs: [
+      {q:'How many students have exactly 1 sibling?', a:8, why:'Count the dots above 1: there are 8.'},
+      {q:'How many students have 2 or more siblings?', a:8, why:'5 + 2 + 1 = 8 students.'},
+      {q:'What is the most common number of siblings?', a:1, why:'The tallest stack is above 1.'}
+    ]
+  },
+  {
+    title: 'Mission 2: On your own', short: 'M2 · Dot plot',
+    intro: 'A survey recorded the number of pets in 16 households. Build the dot plot yourself. Name your list P.',
+    list: 'P', fn: 'dotplot',
+    data: [2,0,1,3,1,0,2,1,5,1,0,2,1,3,0,1],
+    steps: [
+      ['Type the data as a list named P. Use square brackets and commas.', null],
+      ['Graph it with dotplot( ).', null],
+      ['Use length( ) to make sure you have 16 values.', null]
+    ],
+    qs: [
+      {q:'What is the most common number of pets?', a:1, why:'The tallest stack (6 dots) is above 1.'},
+      {q:'How many households have no pets?', a:4, why:'There are 4 dots above 0.'},
+      {q:'One value is far from the rest. What is it?', a:5, why:'One household has 5 pets. Every other household has 3 or fewer.'},
+      {q:'Why is a dot plot a good choice for this data?', mc:['The data is discrete with a small range of values','The data is continuous','The data is categorical','A dot plot always works best'], a:0, why:'Number of pets is counted (discrete) and only goes from 0 to 5, so each dot is easy to see.'}
+    ]
+  },
+  {
+    title: 'Mission 3: Histogram for continuous data', short: 'M3 · Histogram',
+    intro: 'Twenty students recorded minutes spent on homework last night. Time is continuous, so use a histogram. Name your list H.',
+    list: 'H', fn: 'histogram',
+    data: [35,12,48,25,58,18,42,31,55,22,38,15,45,28,52,33,8,41,27,36],
+    steps: [
+      ['Type the data as a list named H.', null],
+      ['Graph a histogram with intervals 10 minutes wide. The second number is the interval width.', 'histogram(H,10)'],
+      ['Zoom out until you see all the bars. Hover or tap a bar to see its height.', null],
+      ['Try it: change 10 to 5. How does the shape change? Change it back to 10 before you check.', null]
+    ],
+    qs: [
+      {q:'Which interval has the most students?', mc:['10 to under 20 min','20 to under 30 min','30 to under 40 min','40 to under 50 min'], a:2, why:'The 30 to 40 bar is tallest: 5 students (31, 33, 35, 36, 38).'},
+      {q:'How many students spent 40 minutes or more?', a:7, why:'4 + 3 = 7 students.'},
+      {q:'Why do the bars touch?', mc:['The intervals cover the number line with no gaps','The data is categorical','To save space','Desmos made a mistake'], a:0, why:'Each interval starts where the last one ends, so there are no gaps.'}
+    ]
+  }
+];
+let missionIdx = 0;
+let missionDone = {};
+try { missionDone = JSON.parse(localStorage.getItem('ovdl-missions') || '{}') || {}; } catch (e) {}
+const saveMissions = () => { try { localStorage.setItem('ovdl-missions', JSON.stringify(missionDone)); } catch (e) {} };
+
+function renderMission() {
+  const chips = $('#missionChips'); chips.innerHTML = '';
+  MISSIONS.forEach((m, i) => {
+    const b = el('button', {class:'chip', type:'button', 'aria-pressed': i === missionIdx ? 'true' : 'false'});
+    const doneCount = m.qs.filter((_, k) => missionDone[i + '-' + k]).length;
+    b.textContent = m.short + (doneCount === m.qs.length ? ' ✓' : '');
+    b.addEventListener('click', () => { missionIdx = i; renderMission(); });
+    chips.appendChild(b);
+  });
+  const m = MISSIONS[missionIdx], body = $('#missionBody');
+  body.innerHTML = '';
+  body.append(el('h2', {}, esc(m.title)), el('p', {}, esc(m.intro)));
+  body.append(el('div', {class:'eyebrow'}, 'Data'), el('div', {class:'data'}, m.data.join(', ')));
+  const ol = el('ol');
+  m.steps.forEach(([txt, code]) => {
+    const li = el('li'); li.append(el('div', {}, esc(txt)));
+    if (code) li.append(codeChip(code, {send: desmosState === 'ready'}));
+    ol.appendChild(li);
+  });
+  body.append(el('div', {class:'eyebrow'}, 'Steps'), ol);
+  if (desmosState === 'ready') {
+    const out = el('div', {class:'fb'}); out.hidden = true;
+    const b = el('button', {class:'btn primary', type:'button'}); b.textContent = 'Check my graph';
+    b.addEventListener('click', () => checkGraph(m, out));
+    const r = el('div', {class:'row'}); r.append(b);
+    body.append(r, out);
+  }
+  body.append(el('div', {class:'eyebrow'}, 'Questions'));
+  m.qs.forEach((q, k) => body.append(missionQuestion(q, missionIdx + '-' + k)));
+}
+function missionQuestion(q, key) {
+  const box = el('div', {class:'q'});
+  const id = 'mq-' + key;
+  box.append(el('label', {for: id}, esc(q.q)));
+  const out = el('div', {class:'fb'}); out.hidden = true;
+  const mark = ok => {
+    out.hidden = false; out.className = 'fb ' + (ok ? 'ok' : 'no');
+    out.innerHTML = ok ? `<b>Correct.</b> ${esc(q.why)}` : `<b>Not quite.</b> Look at your graph again and try once more.`;
+    if (ok && !missionDone[key]) { missionDone[key] = true; progress.mission = Object.keys(missionDone).length; saveMissions(); save(); renderScore(); renderMissionChipsOnly(); }
+  };
+  if (q.mc) {
+    const mc = el('div', {class:'mc', id});
+    q.mc.forEach((opt, i) => {
+      const b = el('button', {type:'button'}); b.textContent = opt;
+      b.addEventListener('click', () => { const ok = i === q.a; b.classList.add(ok ? 'right' : 'wrong'); mark(ok); });
+      mc.appendChild(b);
+    });
+    box.append(mc);
+  } else {
+    const r = el('div', {class:'row'});
+    const inp = el('input', {type:'number', id, inputmode:'numeric'});
+    const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Check';
+    const go = () => { if (inp.value.trim() === '') return; mark(Number(inp.value) === q.a); };
+    b.addEventListener('click', go);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    r.append(inp, b); box.append(r);
+  }
+  if (missionDone[key]) { out.hidden = false; out.className = 'fb ok'; out.innerHTML = `<b>Done.</b> ${esc(q.why)}`; }
+  box.append(out);
+  return box;
+}
+function renderMissionChipsOnly() {
+  document.querySelectorAll('#missionChips .chip').forEach((b, i) => {
+    const m = MISSIONS[i]; const doneCount = m.qs.filter((_, k) => missionDone[i + '-' + k]).length;
+    b.textContent = m.short + (doneCount === m.qs.length ? ' ✓' : '');
+  });
+}
+
+/* ---------- practice generators ---------- */
+const TYPE_BANK = [
+  ['Favourite colour','Categorical'],['Type of phone','Categorical'],['Province of birth','Categorical'],['Favourite school subject','Categorical'],['Eye colour','Categorical'],['How a student gets to school (bus, car, walk)','Categorical'],['Favourite music genre','Categorical'],['Home form','Categorical'],
+  ['Number of siblings','Discrete'],['Goals scored in a hockey game','Discrete'],['Number of absences this semester','Discrete'],['Number of text messages sent today','Discrete'],['Number of cars in a parking lot','Discrete'],['Number of pets in a household','Discrete'],['Number of courses a student takes','Discrete'],['Number of people in a car','Discrete'],
+  ['Height of a student','Continuous'],['Time to run 100 m','Continuous'],['Mass of a backpack','Continuous'],['Temperature at noon','Continuous'],['Length of a fish','Continuous'],['Volume of water in a bottle','Continuous'],['Distance travelled to school','Continuous'],['Time spent on homework','Continuous']
+];
+const TYPE_WHY = {
+  Categorical: 'It names a group or label, not a number you calculate with.',
+  Discrete: 'It is counted, so only whole-number values are possible.',
+  Continuous: 'It is measured, so it can take any value in a range, including decimals.'
+};
+const GRAPH_BANK = [
+  ['Favourite pizza topping of 30 students','Bar graph','Topping is categorical.'],
+  ['Number of goals scored in each of 20 games','Dot plot','Goals are counted (discrete) with a small range.'],
+  ['Heights of 50 grade 12 students','Histogram','Height is measured (continuous), so group it into intervals.'],
+  ['Number of siblings for 25 students','Dot plot','Siblings are counted (discrete) with a small range.'],
+  ['Brand of phone owned by 40 people','Bar graph','Phone brand is categorical.'],
+  ['Daily high temperature for 60 days','Histogram','Temperature is measured (continuous).'],
+  ['Number of pets per household for 18 households','Dot plot','Pets are counted (discrete) with a small range.'],
+  ['Province of birth for 100 people','Bar graph','Province is categorical.'],
+  ['Finish times for 80 runners in a 5 km race','Histogram','Time is measured (continuous).'],
+  ['Correct answers on a 10-question quiz for 22 students','Dot plot','Scores are counted (discrete) from 0 to 10.'],
+  ['Volume of organic produce sold from each of 6 suppliers','Bar graph','Each bar is a supplier, which is a category.'],
+  ['Mass of 40 bags of apples','Histogram','Mass is measured (continuous).']
+];
+const TF_BANK = [
+  ['Bars in a histogram should touch.', true, 'The intervals cover the number line with no gaps.'],
+  ['Bars in a bar graph of categorical data should touch.', false, 'Categories are separate, so leave gaps between bars.'],
+  ['A dot plot shows every individual data value.', true, 'Each dot is one data value.'],
+  ['A histogram shows every individual data value.', false, 'A histogram only shows how many values fall in each interval.'],
+  ['Continuous data is usually counted.', false, 'Continuous data is measured. Discrete data is counted.'],
+  ['Number of siblings is discrete data.', true, 'You count siblings, so only whole numbers are possible.'],
+  ['All intervals in a histogram should be the same width.', true, 'Equal widths keep the bars fair to compare.'],
+  ['One-variable data records two facts about each person.', false, 'One-variable data records one fact about each person.'],
+  ['A frequency table shows how many times each value or category occurs.', true, 'Frequency means how often.'],
+  ['Time to drive to school is discrete data.', false, 'Time is measured, so it is continuous.'],
+  ['Favourite sport should be graphed with a histogram.', false, 'Favourite sport is categorical. Use a bar graph.'],
+  ['In a tally chart, the fifth mark crosses the first four.', true, 'Groups of five make tallies quick to count.']
+];
+const DOT_CONTEXTS = [
+  ['Goals scored per game','goals'],['Books read this month','books'],['Number of siblings','siblings'],['Days absent this month','days'],['Pets per household','pets'],['Cups of coffee per day','cups'],['Hours of sleep (rounded)','hours']
+];
+const TALLY_CONTEXTS = [
+  ['Favourite season', ['Winter','Spring','Summer','Fall']],
+  ['How students get to school', ['Bus','Car','Walk','Bike']],
+  ['Favourite streaming service', ['Service A','Service B','Service C','Other']],
+  ['Shift worked by part-time staff', ['Morning','Afternoon','Evening','Weekend']]
+];
+const GROUP_CONTEXTS = [
+  ['Commute time (minutes)', 0, 50, 10], ['Daily screen time (hours)', 0, 8, 2], ['Mass of apples (grams)', 120, 220, 20], ['Height of seedlings (cm)', 0, 25, 5]
+];
+
+let skillFilter = 'all', current = null, lastSkill = null;
+function genQuestion() {
+  const pool = skillFilter === 'all' ? SKILLS.map(s => s.id) : [skillFilter];
+  let skill = pick(pool);
+  if (pool.length > 1 && skill === lastSkill) skill = pick(pool.filter(s => s !== lastSkill));
+  lastSkill = skill;
+  return GEN[skill]();
+}
+const GEN = {
+  type() {
+    const [v, ans] = pick(TYPE_BANK);
+    return {skill:'type', prompt:`Classify this variable: <b>${esc(v)}</b>`, mc:['Categorical','Discrete','Continuous'], answer: ans, why: TYPE_WHY[ans]};
+  },
+  graph() {
+    const [s, ans, why] = pick(GRAPH_BANK);
+    return {skill:'graph', prompt:`Which graph fits best? <b>${esc(s)}</b>`, mc:['Bar graph','Dot plot','Histogram'], answer: ans, why};
+  },
+  tf() {
+    const [s, ans, why] = pick(TF_BANK);
+    return {skill:'tf', prompt:`True or false? <b>${esc(s)}</b>`, mc:['True','False'], answer: ans ? 'True' : 'False', why};
+  },
+  dot() {
+    const [label, unit] = pick(DOT_CONTEXTS);
+    let vals, cnts, tries = 0;
+    do {
+      const lo = ri(0, 2), hi = lo + ri(4, 6);
+      vals = Array.from({length: hi - lo + 1}, (_, i) => lo + i);
+      cnts = vals.map((_, i) => i === 0 || i === vals.length - 1 ? ri(1, 3) : ri(0, 7));
+      tries++;
+    } while (cnts.filter(c => c === Math.max(...cnts)).length > 1 && tries < 50);
+    const total = cnts.reduce((a, b) => a + b, 0);
+    const kind = pick(['freq', 'total', 'mode', 'atleast', 'atmost']);
+    let prompt, answer, why;
+    if (kind === 'freq') { const i = ri(0, vals.length - 1); prompt = `How many data values are <b>${vals[i]}</b>?`; answer = cnts[i]; why = `There ${cnts[i] === 1 ? 'is 1 dot' : 'are ' + cnts[i] + ' dots'} above ${vals[i]}.`; }
+    if (kind === 'total') { prompt = 'How many data values are shown in total?'; answer = total; why = `Add the stacks: ${cnts.join(' + ')} = ${total}.`; }
+    if (kind === 'mode') { const m = cnts.indexOf(Math.max(...cnts)); prompt = 'What is the most common value?'; answer = vals[m]; why = `The tallest stack (${cnts[m]} dots) is above ${vals[m]}.`; }
+    if (kind === 'atleast') { const i = ri(1, vals.length - 2); const part = cnts.slice(i); answer = part.reduce((a, b) => a + b, 0); prompt = `How many values are <b>${vals[i]} or more</b>?`; why = `${part.join(' + ')} = ${answer}.`; }
+    if (kind === 'atmost') { const i = ri(1, vals.length - 2); const part = cnts.slice(0, i + 1); answer = part.reduce((a, b) => a + b, 0); prompt = `How many values are <b>${vals[i]} or less</b>?`; why = `${part.join(' + ')} = ${answer}.`; }
+    return {skill:'dot', stim: dotplotSVG(vals, cnts, {label, w: 420}), prompt, num: true, answer, why, unit};
+  },
+  tally() {
+    const [label, cats] = pick(TALLY_CONTEXTS);
+    const n = cats.map(() => ri(2, 14));
+    const total = n.reduce((a, b) => a + b, 0);
+    const kind = pick(['one', 'total', 'diff']);
+    let prompt, answer, why;
+    if (kind === 'one') { const i = ri(0, 3); prompt = `What is the frequency for <b>${esc(cats[i])}</b>?`; answer = n[i]; why = `${Math.floor(n[i] / 5)} group(s) of 5 plus ${n[i] % 5} = ${n[i]}.`; }
+    if (kind === 'total') { prompt = 'How many responses are there in total?'; answer = total; why = `${n.join(' + ')} = ${total}.`; }
+    if (kind === 'diff') { let i = ri(0, 3), j = ri(0, 3); while (j === i) j = ri(0, 3); if (n[i] < n[j]) [i, j] = [j, i]; prompt = `How many more chose <b>${esc(cats[i])}</b> than <b>${esc(cats[j])}</b>?`; answer = n[i] - n[j]; why = `${n[i]} − ${n[j]} = ${answer}.`; }
+    const table = `<div class="tablewrap"><table class="ft"><thead><tr><th>${esc(label)}</th><th>Tally</th></tr></thead><tbody>${cats.map((c, i) => `<tr><td>${esc(c)}</td><td>${tallySVG(n[i])}</td></tr>`).join('')}</tbody></table></div>`;
+    return {skill:'tally', stim: table, prompt, num: true, answer, why};
+  },
+  group() {
+    const [label, lo, hi, w] = pick(GROUP_CONTEXTS);
+    const decimals = (hi - lo) <= 30 ? 1 : 0;
+    const N = ri(12, 15), vals = [];
+    while (vals.length < N) {
+      const v = +(lo + Math.random() * (hi - lo)).toFixed(decimals);
+      if (Math.abs(((v - lo) / w) - Math.round((v - lo) / w)) < 1e-9) continue; // skip boundary values
+      vals.push(v);
+    }
+    const k = ri(0, Math.round((hi - lo) / w) - 1), a = lo + k * w, b = a + w;
+    const inside = vals.filter(v => v >= a && v < b);
+    return {skill:'group', stim: `<p class="eyebrow">${esc(label)}</p><div class="vals">${vals.map(v => `<span>${v}</span>`).join('')}</div>`,
+      prompt: `How many values fall in the interval <b>${a} to under ${b}</b>?`, num: true, answer: inside.length,
+      why: inside.length ? `The values are ${inside.slice().sort((p, q) => p - q).join(', ')}.` : 'No values fall in that interval.'};
+  }
+};
+
+function renderSkillChips() {
+  const box = $('#skillChips'); box.innerHTML = '';
+  [{id:'all', name:'Mixed'}].concat(SKILLS).forEach(s => {
+    const b = el('button', {class:'chip', type:'button', 'aria-pressed': s.id === skillFilter ? 'true' : 'false'});
+    b.textContent = s.name;
+    b.addEventListener('click', () => { skillFilter = s.id; renderSkillChips(); nextQuestion(); });
+    box.appendChild(b);
+  });
+}
+function nextQuestion() { current = genQuestion(); renderQuestion(); }
+function renderQuestion() {
+  const q = current, card = $('#qcard');
+  const sk = SKILLS.find(s => s.id === q.skill).name;
+  card.innerHTML = `<div class="eyebrow">${sk}</div>${q.stim ? `<div class="stim">${q.stim}</div>` : ''}<p style="font-size:1.08rem">${q.prompt}</p>`;
+  const out = el('div', {class:'fb'}); out.hidden = true;
+  const next = el('button', {class:'btn primary', type:'button'}); next.textContent = 'Next question'; next.hidden = true;
+  next.addEventListener('click', nextQuestion);
+  let answered = false;
+  const finish = ok => {
+    if (answered) return; answered = true;
+    progress[q.skill].a++; if (ok) progress[q.skill].c++;
+    save(); renderScore();
+    out.hidden = false; out.className = 'fb ' + (ok ? 'ok' : 'no');
+    out.innerHTML = ok ? `<b>Correct.</b> ${esc(q.why)}` : `<b>The answer is ${esc(q.answer)}.</b> ${esc(q.why)}`;
+    next.hidden = false; next.focus();
+  };
+  if (q.mc) {
+    const mc = el('div', {class:'mc'});
+    q.mc.forEach(opt => {
+      const b = el('button', {type:'button'}); b.textContent = opt;
+      b.addEventListener('click', () => {
+        if (answered) return;
+        const ok = opt === q.answer;
+        b.classList.add(ok ? 'right' : 'wrong');
+        if (!ok) [...mc.children].forEach(x => { if (x.textContent === q.answer) x.classList.add('right'); });
+        [...mc.children].forEach(x => x.disabled = true);
+        finish(ok);
+      });
+      mc.appendChild(b);
+    });
+    card.append(mc);
+  } else {
+    const r = el('div', {class:'row'});
+    const inp = el('input', {type:'number', id:'practiceAnswer', inputmode:'numeric', 'aria-label':'Your answer'});
+    const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Check';
+    const go = () => { if (answered || inp.value.trim() === '') return; inp.disabled = true; b.disabled = true; finish(Number(inp.value) === q.answer); };
+    b.addEventListener('click', go);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    r.append(inp, b); card.append(r);
+  }
+  card.append(out, next);
+}
+$('#resetProgress').addEventListener('click', () => { $('#resetConfirm').hidden = false; });
+$('#resetNo').addEventListener('click', () => { $('#resetConfirm').hidden = true; });
+$('#resetYes').addEventListener('click', () => {
+  SKILLS.forEach(s => progress[s.id] = {c:0, a:0}); progress.mission = 0; missionDone = {};
+  save(); saveMissions(); renderScore(); $('#resetConfirm').hidden = true;
+  if (desmosState !== 'idle') renderMission();
+});
+
+/* ---------- boot ---------- */
+progress.mission = Object.keys(missionDone).length;
+renderScore(); renderSkillChips(); nextQuestion(); renderMission();
+show((location.hash || '#learn').slice(1));
+</script>
