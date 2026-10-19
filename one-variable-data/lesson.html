@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Variable Data Lesson</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap">
+<style>
+:root{--ink:#1a1a1a;--soft:#5b6470;--rule:#9aa3ad;--light:#d7dde3;--paper:#ffffff;--ans:#b3261e;--tint:#eef3f8}
+*{box-sizing:border-box}
+html{background:#e9edf1}
+body{margin:0;color:var(--ink);font-family:"Atkinson Hyperlegible",Calibri,Arial,sans-serif;font-size:11.5pt;line-height:1.45}
+.page{background:var(--paper);max-width:8.5in;margin:24px auto;padding:0.6in 0.65in;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+@media (max-width:700px){.page{margin:0;padding:20px 16px;box-shadow:none}}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;font-size:10.5pt}
+.hdr .nd{text-align:right;line-height:2}
+.key{font-weight:700;color:var(--ans);border:2px solid var(--ans);border-radius:4px;padding:2px 10px;letter-spacing:.08em;align-self:center}
+h1{font-size:24pt;font-weight:400;margin:10px 0 4px;padding-bottom:6px;border-bottom:1.5px solid var(--ink)}
+h2{font-size:14pt;color:#2d70b3;font-weight:700;margin:20px 0 8px}
+.min{font-size:9.5pt;color:var(--soft);font-weight:400;margin-left:6px}
+p{margin:6px 0}
+ul,ol{margin:6px 0;padding-left:24px}
+li{margin:4px 0}
+.note{background:var(--tint);padding:8px 12px;border-radius:4px}
+.data{font-variant-numeric:tabular-nums;letter-spacing:.01em;padding-left:12px;border-left:3px solid var(--light)}
+.tw{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;margin:8px 0;font-size:10.5pt;break-inside:avoid}
+table.t th,table.t td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}
+table.t th{background:var(--tint)}
+table.sort td,table.match td{height:32px}
+table.prac td{height:52px}
+table.nums td{text-align:center;min-width:44px;height:32px}
+table.tallyt{width:auto;min-width:280px}
+table.tallyt td{height:26px;padding:3px 8px;vertical-align:middle}
+table.tallyt td:nth-child(2){min-width:110px}
+table.tallyt td:nth-child(3){min-width:80px;text-align:center}
+.tally line{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.split{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:600px){.split{grid-template-columns:minmax(0,1fr)}}
+.ans{font-family:Kalam,"Comic Sans MS",cursive;color:var(--ans);font-size:12pt;line-height:30px}
+td .ans{line-height:1.3}
+.blank{display:inline-block;border-bottom:1px solid var(--ink);height:1.1em;vertical-align:baseline}
+.lines{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 29px,var(--light) 29px,var(--light) 30px);margin:4px 0 10px;padding:0 4px}
+.gwrap{margin:6px 0 10px;break-inside:avoid;overflow-x:auto}
+svg.graph{width:100%;max-width:520px;height:auto;display:block}
+svg.graph .gl{stroke:#dfe5eb;stroke-width:1}
+svg.graph .ax{stroke:var(--ink);stroke-width:1.6}
+svg.graph .gt{font-weight:700;font-size:15px;fill:var(--ink)}
+svg.graph .gx{font-size:13px;fill:var(--ink);font-weight:700}
+svg.graph .tk{font-size:12px;fill:var(--ink)}
+svg.graph .hint{font-size:13px;fill:var(--soft)}
+svg.graph .mk{fill:var(--ans);fill-opacity:.28;stroke:var(--ans);stroke-width:1.5}
+svg.graph .dot{fill:var(--ans)}
+.keep{break-inside:avoid}
+.lab{border:1.5px solid #2d70b3;border-radius:6px;padding:10px 14px;margin:8px 0;overflow-wrap:anywhere}
+.lab a{color:#2d70b3}
+.steps li{margin:2px 0}
+@page{size:letter;margin:0.55in 0.6in}
+@media print{
+  html{background:none}
+  .page{margin:0;padding:0;box-shadow:none;max-width:none}
+  .pb{break-before:page}
+  svg.graph{max-width:3.6in}
+  body{font-size:10.5pt}
+  .lines{margin:2px 0 6px}
+  h2{break-after:avoid}
+  .ans{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style></head>
+<body><div class="page">
+
+<header class="hdr">
+  <div>MAP4C<br>Mr. Westcott</div>
+  
+  <div class="nd">Name: <span class="blank" style="min-width:22ch"></span><br>Date: <span class="blank" style="min-width:22ch"></span></div>
+</header>
+<h1>Lesson: One-Variable Data</h1>
+
+<section>
+<h2>Learning Goals</h2>
+<p>By the end of this lesson I can:</p>
+<ul>
+<li>tell the difference between one-variable and two-variable data</li>
+<li>classify data as categorical, discrete, or continuous</li>
+<li>organize data in a tally chart and a frequency table</li>
+<li>choose and draw a suitable graph (bar graph, dot plot, or histogram) and explain my choice</li>
+<li>write descriptive statements and pose questions that one-variable data can answer</li>
+</ul>
+<p class="note"><b>One-variable data:</b> one fact (variable) is recorded about each person or thing. Example: the number of siblings each student has.<br><b>Two-variable data:</b> two facts are recorded about each one, to see how they are related. Example: each student's height <i>and</i> shoe size. (We study this later.)</p>
+</section>
+
+<section>
+<h2>Warm-up <span class="min">8 min</span></h2>
+<p><b>Match it.</b> Write the letter of the matching definition beside each term.</p>
+<table class="t match">
+<tbody>
+<tr><td style="width:24%"><b>Variable</b></td><td style="width:12%"></td><td>A. The number of times a value or category occurs</td></tr>
+<tr><td><b>Data</b></td><td></td><td>B. A graph with one dot per data value, stacked above a number line</td></tr>
+<tr><td><b>Frequency</b></td><td></td><td>C. A characteristic that can change from one person or thing to the next</td></tr>
+<tr><td><b>Dot plot</b></td><td></td><td>D. Facts or values collected to answer a question</td></tr>
+</tbody></table>
+
+<p><b>Television survey.</b> Twenty households were asked how many TVs they own.</p>
+<div class="tw"><table class="t nums">
+<tr><th>Number of TVs</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+<tr><th>Frequency (households)</th><td>1</td><td>5</td><td>8</td><td>4</td><td>2</td></tr>
+</table></div>
+<ol>
+<li>What does each frequency number represent?<div class="lines" style="min-height:30px"></div></li>
+<li>What is the variable? How many facts are known about each household?<div class="lines" style="min-height:30px"></div></li>
+<li>What is the most common number of TVs? <span class="blank" style="min-width:18ch"></span></li>
+<li>How many households own 3 or more TVs? <span class="blank" style="min-width:18ch"></span></li>
+</ol>
+</section>
+
+<section class="pb">
+<h2>Part 1: Types of Data and Choosing a Graph <span class="min">15 min</span></h2>
+<p>The type of data decides which graph to use.</p>
+<table class="t">
+<thead><tr><th style="width:22%">Type</th><th>What it is</th><th style="width:26%">Examples</th><th style="width:20%">A good graph</th></tr></thead>
+<tbody>
+<tr><td><b>Categorical</b></td><td></td><td></td><td></td></tr>
+<tr><td><b>Numerical: discrete</b></td><td></td><td></td><td></td></tr>
+<tr><td><b>Numerical: continuous</b></td><td></td><td></td><td></td></tr>
+</tbody></table>
+<p class="note"><b>Quick test:</b> Do you <span class="blank" style="min-width:9ch"></span> it or <span class="blank" style="min-width:9ch"></span> it? Counted values are discrete. Measured values are continuous.</p>
+
+<p><b>Sort it.</b> Classify each variable as categorical, discrete, or continuous.</p>
+<table class="t sort">
+<thead><tr><th>Variable</th><th style="width:34%">Type</th></tr></thead>
+<tbody>
+<tr><td>a) Number of text messages sent today</td><td></td></tr>
+<tr><td>b) Time to drive to school</td><td></td></tr>
+<tr><td>c) Favourite music genre</td><td></td></tr>
+<tr><td>d) Mass of a backpack</td><td></td></tr>
+<tr><td>e) Number of absences this semester</td><td></td></tr>
+<tr><td>f) Province of birth</td><td></td></tr>
+</tbody></table>
+
+<p><b>One or two variables?</b> Circle 1 or 2.</p>
+<table class="t sort">
+<tbody>
+<tr><td>a) The height of each student in the class</td><td style="width:34%">1 &nbsp;/&nbsp; 2 </td></tr>
+<tr><td>b) The height <i>and</i> shoe size of each student</td><td>1 &nbsp;/&nbsp; 2 </td></tr>
+<tr><td>c) How each student gets to school (bus, walk, car)</td><td>1 &nbsp;/&nbsp; 2 </td></tr>
+<tr><td>d) Hours each student studied <i>and</i> their test mark</td><td>1 &nbsp;/&nbsp; 2 </td></tr>
+</tbody></table>
+
+<p><b>Think about it:</b> Age is usually written in whole years (16, 17, 18), so it looks discrete. Explain why age is really continuous.</p>
+<div class="lines" style="min-height:60px"></div>
+</section>
+
+<section class="pb">
+<h2>Part 2: Tally Charts and Frequency Tables <span class="min">12 min</span></h2>
+<p>A <b>tally chart</b> counts data as it is collected. A <b>frequency table</b> shows the count (frequency) for each category or value.</p>
+<p><b>Example: Part-time Job Survey.</b> Every Grade 12 student with a part-time job was tallied by homeroom.</p>
+<div class="split">
+<table class="t tallyt">
+<thead><tr><th>Homeroom</th><th>Tally</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td>12A</td><td><svg width="34" height="24" viewBox="0 0 34 24" class="tally" role="img" aria-label="tally 4"><line x1="4" x2="4" y1="3" y2="21"/><line x1="11" x2="11" y1="3" y2="21"/><line x1="18" x2="18" y1="3" y2="21"/><line x1="25" x2="25" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12B</td><td><svg width="47" height="24" viewBox="0 0 47 24" class="tally" role="img" aria-label="tally 6"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12C</td><td><svg width="20" height="24" viewBox="0 0 20 24" class="tally" role="img" aria-label="tally 2"><line x1="4" x2="4" y1="3" y2="21"/><line x1="11" x2="11" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12D</td><td><svg width="61" height="24" viewBox="0 0 61 24" class="tally" role="img" aria-label="tally 8"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="45" x2="45" y1="3" y2="21"/><line x1="52" x2="52" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12E</td><td><svg width="54" height="24" viewBox="0 0 54 24" class="tally" role="img" aria-label="tally 7"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="45" x2="45" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12F</td><td><svg width="47" height="24" viewBox="0 0 47 24" class="tally" role="img" aria-label="tally 6"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12G</td><td><svg width="27" height="24" viewBox="0 0 27 24" class="tally" role="img" aria-label="tally 3"><line x1="4" x2="4" y1="3" y2="21"/><line x1="11" x2="11" y1="3" y2="21"/><line x1="18" x2="18" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>12H</td><td><svg width="40" height="24" viewBox="0 0 40 24" class="tally" role="img" aria-label="tally 5"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/></svg></td><td></td></tr><tr><td><b>Total</b></td><td></td><td></td></tr>
+</tbody></table>
+<div>
+<p>a) Identify the variable. Is it categorical, discrete, or continuous?</p><div class="lines" style="min-height:30px"></div>
+<p>b) Complete the frequency column and the total.</p>
+<p>c) Which graph should you use? Why? (Use the table in Part 1.)</p><div class="lines" style="min-height:90px"></div>
+</div></div>
+<div class="keep">
+<p>d) Draw the graph. Write a title and label both axes.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Students with Part-Time Jobs"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="60" y1="44" y2="244" class="ax"/><text x="52" y="248" text-anchor="end" class="tk">0</text><text x="52" y="208" text-anchor="end" class="tk">2</text><text x="52" y="168" text-anchor="end" class="tk">4</text><text x="52" y="128" text-anchor="end" class="tk">6</text><text x="52" y="88" text-anchor="end" class="tk">8</text><text x="100.0" y="262" text-anchor="middle" class="tk">12A</text><text x="160.0" y="262" text-anchor="middle" class="tk">12B</text><text x="220.0" y="262" text-anchor="middle" class="tk">12C</text><text x="280.0" y="262" text-anchor="middle" class="tk">12D</text><text x="340.0" y="262" text-anchor="middle" class="tk">12E</text><text x="400.0" y="262" text-anchor="middle" class="tk">12F</text><text x="460.0" y="262" text-anchor="middle" class="tk">12G</text><text x="520.0" y="262" text-anchor="middle" class="tk">12H</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+</div>
+<p class="note" style="margin-top:10px"><b>Writing descriptive statements.</b> Use numbers from the data. Try: <i>The most / least common ___ was ___ with ___.</i> &middot; <i>___ out of ___ (___ %)...</i> &middot; <i>The values go from ___ (smallest) to ___ (largest).</i> &middot; <i>___ had about twice as many as ___.</i></p>
+<p>e) Write two descriptive statements about this data set.</p>
+<div class="lines" style="min-height:60px"></div>
+<p>f) Can we say a student in 12D is more likely to have a job than a student in 12C? Explain.</p>
+<div class="lines" style="min-height:30px"></div>
+</section>
+
+<section class="pb">
+<h2>Part 3: Drawing Dot Plots and Histograms <span class="min">15 min</span></h2>
+<p class="note"><b>Graph checklist:</b> title &nbsp;&middot;&nbsp; both axes labelled (with units) &nbsp;&middot;&nbsp; even scale starting at 0 &nbsp;&middot;&nbsp; accurate dots or bars &nbsp;&middot;&nbsp; gaps for a bar graph, no gaps for a histogram</p>
+<div class="keep">
+<p><b>Example 1: Dot Plot.</b> Twenty students reported their number of siblings:</p>
+<p class="data">0, 1, 1, 2, 1, 3, 0, 2, 1, 1, 4, 2, 0, 1, 2, 1, 3, 1, 0, 2</p>
+<ol class="steps">
+<li>Draw a number line from the smallest to the largest value (0 to 4).</li>
+<li>Place one dot above the value for each data point. Stack repeated values, one dot per square.</li>
+<li>Add a title and label the axis.</li>
+</ol>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Number of Siblings"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Number of Siblings</text><text x="300.0" y="288" text-anchor="middle" class="gx">Number of siblings</text><line x1="140" x2="140" y1="244" y2="250" class="ax"/><text x="140" y="264" text-anchor="middle" class="tk">0</text><line x1="220" x2="220" y1="244" y2="250" class="ax"/><text x="220" y="264" text-anchor="middle" class="tk">1</text><line x1="300" x2="300" y1="244" y2="250" class="ax"/><text x="300" y="264" text-anchor="middle" class="tk">2</text><line x1="380" x2="380" y1="244" y2="250" class="ax"/><text x="380" y="264" text-anchor="middle" class="tk">3</text><line x1="460" x2="460" y1="244" y2="250" class="ax"/><text x="460" y="264" text-anchor="middle" class="tk">4</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+<p>Frequency check: 0 → <span class="blank" style="min-width:4ch"></span> &nbsp; 1 → <span class="blank" style="min-width:4ch"></span> &nbsp; 2 → <span class="blank" style="min-width:4ch"></span> &nbsp; 3 → <span class="blank" style="min-width:4ch"></span> &nbsp; 4 → <span class="blank" style="min-width:4ch"></span> &nbsp; Total = <span class="blank" style="min-width:4ch"></span></p>
+</div>
+
+<div>
+<p><b>Example 2: Histogram.</b> Commute time to school (minutes) for 24 students:</p>
+<p class="data">5, 12, 18, 25, 8, 15, 32, 22, 14, 9, 27, 41, 19, 11, 6, 23, 35, 17, 13, 28, 21, 16, 38, 10</p>
+<p>Time is continuous, so group it into equal intervals. A value on a boundary (like 10) goes in the interval that <i>starts</i> with it.</p>
+<div class="split">
+<div>
+<table class="t tallyt">
+<thead><tr><th>Commute time (min)</th><th>Tally</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td>0 to under 10</td><td></td><td></td></tr><tr><td>10 to under 20</td><td></td><td></td></tr><tr><td>20 to under 30</td><td></td><td></td></tr><tr><td>30 to under 40</td><td></td><td></td></tr><tr><td>40 to under 50</td><td></td><td></td></tr><tr><td><b>Total</b></td><td></td><td></td></tr></tbody></table>
+</div>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Commute Time to School"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Commute Time to School</text><text x="300.0" y="288" text-anchor="middle" class="gx">Commute time (min)</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Number of students</text><line x1="60" x2="60" y1="44" y2="244" class="ax"/><text x="52" y="248" text-anchor="end" class="tk">0</text><text x="52" y="208" text-anchor="end" class="tk">2</text><text x="52" y="168" text-anchor="end" class="tk">4</text><text x="52" y="128" text-anchor="end" class="tk">6</text><text x="52" y="88" text-anchor="end" class="tk">8</text><text x="52" y="48" text-anchor="end" class="tk">10</text><line x1="80" x2="80" y1="244" y2="250" class="ax"/><text x="80" y="264" text-anchor="middle" class="tk">0</text><line x1="160" x2="160" y1="244" y2="250" class="ax"/><text x="160" y="264" text-anchor="middle" class="tk">10</text><line x1="240" x2="240" y1="244" y2="250" class="ax"/><text x="240" y="264" text-anchor="middle" class="tk">20</text><line x1="320" x2="320" y1="244" y2="250" class="ax"/><text x="320" y="264" text-anchor="middle" class="tk">30</text><line x1="400" x2="400" y1="244" y2="250" class="ax"/><text x="400" y="264" text-anchor="middle" class="tk">40</text><line x1="480" x2="480" y1="244" y2="250" class="ax"/><text x="480" y="264" text-anchor="middle" class="tk">50</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+</div>
+<p>A dot plot shows <span class="blank" style="min-width:8ch"></span> data value. A histogram shows how many values fall in each <span class="blank" style="min-width:9ch"></span>.</p>
+</div>
+</section>
+
+<section class="pb">
+<h2>Practice <span class="min">20 min</span></h2>
+<p class="note">Do questions 1 to 3 in class. Finish 4 and 5 for homework if you run out of time.</p>
+<p><b>1.</b> For each situation: identify the variable, classify it, and name a good graph with a reason.</p>
+<table class="t prac">
+<thead><tr><th style="width:34%">Situation</th><th style="width:20%">Variable</th><th style="width:16%">Type</th><th>Graph and why</th></tr></thead>
+<tbody>
+<tr><td>a) A phone store records the brand of each phone it sells in one week.</td><td></td><td></td><td></td></tr>
+<tr><td>b) A grocery store records which supplier delivered each of its 50 produce orders.</td><td></td><td></td><td></td></tr>
+<tr><td>c) A nurse records the heights of 30 Grade 12 students.</td><td></td><td></td><td></td></tr>
+<tr><td>d) A class surveys 25 students on their favourite fast-food restaurant.</td><td></td><td></td><td></td></tr>
+<tr><td>e) A survey records the number of pets in each of 15 households.</td><td></td><td></td><td></td></tr>
+<tr><td>f) A gym teacher records 100 m sprint times for a class of 28.</td><td></td><td></td><td></td></tr>
+</tbody></table>
+
+<div class="keep">
+<p><b>2.</b> Quiz scores (out of 10) for 18 students:</p>
+<p class="data">7, 8, 6, 9, 7, 10, 5, 8, 7, 6, 8, 9, 7, 4, 8, 7, 6, 8</p>
+<p>a) Make a frequency table.</p>
+<div class="tw"><table class="t nums">
+<tr><th>Score</th><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>Total</td></tr>
+<tr><th>Frequency</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+<p>b) Draw a dot plot.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Quiz Scores"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+</div>
+<p>c) Write two descriptive statements about the data.</p>
+<div class="lines" style="min-height:60px"></div>
+
+<p><b>3.</b> Jordan surveyed his class on their favourite sport and drew a histogram with the bars touching. What is wrong with his graph? What should he draw instead?</p>
+<div class="lines" style="min-height:90px"></div>
+
+<div class="keep">
+<p><b>4.</b> Daily screen time (hours) for 20 students:</p>
+<p class="data">3.5, 5.2, 1.8, 4.0, 6.5, 2.7, 3.1, 4.8, 7.2, 2.2, 3.9, 5.5, 0.9, 4.4, 3.3, 6.1, 2.5, 4.7, 3.8, 5.0</p>
+<p>a) Is screen time discrete or continuous? Explain.</p>
+<div class="lines" style="min-height:30px"></div>
+<p>b) Make a frequency table. Remember: 4.0 goes in "4 to under 6".</p>
+<div class="tw"><table class="t nums">
+<tr><th>Screen time (h)</th><td>0 to under 2</td><td>2 to under 4</td><td>4 to under 6</td><td>6 to under 8</td><td>Total</td></tr>
+<tr><th>Frequency</th><td></td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+</div>
+<div class="keep">
+<p>c) Draw a histogram.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Daily Screen Time"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="60" y1="44" y2="244" class="ax"/><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+</div>
+<p>d) What percent of students have 4 or more hours of screen time?</p>
+<div class="lines" style="min-height:90px"></div>
+<p><b>5.</b> Pose two questions that could be answered using the screen time data in question 4.</p>
+<div class="lines" style="min-height:60px"></div>
+</section>
+
+<section class="keep">
+<h2>Exit Ticket <span class="min">5 min</span></h2>
+<p>Classify each variable and name a good graph.</p>
+<table class="t">
+<thead><tr><th>Situation</th><th style="width:22%">Type</th><th style="width:22%">Graph</th></tr></thead>
+<tbody>
+<tr><td>1. Each student's favourite social media app</td><td></td><td></td></tr>
+<tr><td>2. Number of goals each player scored this season</td><td></td><td></td></tr>
+<tr><td>3. Mass of each player's hockey bag</td><td></td><td></td></tr>
+</tbody></table>
+<p>4. In one sentence, explain why histogram bars touch but bar graph bars do not.</p>
+<div class="lines" style="min-height:60px"></div>
+</section>
+
+<section class="pb">
+<h2>Homework</h2>
+<div class="lab"><b>1. Online practice: One-Variable Data Lab</b> (link also posted in Google Classroom)<br>
+<a href="https://ryanwestcott-ops.github.io/map4c-labs/one-variable-data/">https://ryanwestcott-ops.github.io/map4c-labs/one-variable-data/</a><br>
+<b>Done means:</b> all 3 Desmos missions completed, and at least 3 correct in each Practice skill.</div>
+<p><b>2.</b> Hansa works as a physiotherapy assistant. She recorded the number of whole weeks of physiotherapy prescribed for each patient.</p>
+<div class="split">
+<table class="t tallyt">
+<thead><tr><th>Number of Weeks</th><th>Tally</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><svg width="61" height="24" viewBox="0 0 61 24" class="tally" role="img" aria-label="tally 8"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="45" x2="45" y1="3" y2="21"/><line x1="52" x2="52" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>2</td><td><svg width="88" height="24" viewBox="0 0 88 24" class="tally" role="img" aria-label="tally 12"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="44" x2="44" y1="3" y2="21"/><line x1="50" x2="50" y1="3" y2="21"/><line x1="56" x2="56" y1="3" y2="21"/><line x1="35" x2="59" y1="18" y2="6"/><line x1="72" x2="72" y1="3" y2="21"/><line x1="79" x2="79" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>3</td><td><svg width="108" height="24" viewBox="0 0 108 24" class="tally" role="img" aria-label="tally 15"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="44" x2="44" y1="3" y2="21"/><line x1="50" x2="50" y1="3" y2="21"/><line x1="56" x2="56" y1="3" y2="21"/><line x1="35" x2="59" y1="18" y2="6"/><line x1="72" x2="72" y1="3" y2="21"/><line x1="78" x2="78" y1="3" y2="21"/><line x1="84" x2="84" y1="3" y2="21"/><line x1="90" x2="90" y1="3" y2="21"/><line x1="69" x2="93" y1="18" y2="6"/></svg></td><td></td></tr><tr><td>4</td><td><svg width="74" height="24" viewBox="0 0 74 24" class="tally" role="img" aria-label="tally 10"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/><line x1="44" x2="44" y1="3" y2="21"/><line x1="50" x2="50" y1="3" y2="21"/><line x1="56" x2="56" y1="3" y2="21"/><line x1="35" x2="59" y1="18" y2="6"/></svg></td><td></td></tr><tr><td>5</td><td><svg width="34" height="24" viewBox="0 0 34 24" class="tally" role="img" aria-label="tally 4"><line x1="4" x2="4" y1="3" y2="21"/><line x1="11" x2="11" y1="3" y2="21"/><line x1="18" x2="18" y1="3" y2="21"/><line x1="25" x2="25" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>6</td><td><svg width="47" height="24" viewBox="0 0 47 24" class="tally" role="img" aria-label="tally 6"><line x1="4" x2="4" y1="3" y2="21"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="16" x2="16" y1="3" y2="21"/><line x1="22" x2="22" y1="3" y2="21"/><line x1="1" x2="25" y1="18" y2="6"/><line x1="38" x2="38" y1="3" y2="21"/></svg></td><td></td></tr><tr><td>7</td><td><svg width="20" height="24" viewBox="0 0 20 24" class="tally" role="img" aria-label="tally 1"><line x1="4" x2="4" y1="3" y2="21"/></svg></td><td></td></tr><tr><td><b>Total</b></td><td></td><td></td></tr></tbody></table>
+<div>
+<p>a) Convert each tally to a frequency. How many patients are there in total? <span class="blank" style="min-width:14ch"></span></p>
+<p>b) What do you know about each patient?</p><div class="lines" style="min-height:60px"></div>
+<p>c) Is this a one-variable data set? Explain.</p><div class="lines" style="min-height:30px"></div>
+<p>d) Identify the variable and classify it.</p><div class="lines" style="min-height:30px"></div>
+</div></div>
+<div class="keep">
+<p>e) Draw a suitable graph.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Weeks of Physiotherapy Prescribed"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="60" y1="44" y2="244" class="ax"/><line x1="60" x2="540" y1="244" y2="244" class="ax"/></svg></div>
+
+</div>
+<p>f) What percent of patients were prescribed 3 weeks or less?</p>
+<div class="lines" style="min-height:90px"></div>
+<div class="keep">
+<p><b>3. Extension (optional): Collect your own data.</b> Ask 10 people one question with a counted answer (example: "How many people live in your home?"). Make a frequency table, draw a suitable graph, and write two descriptive statements. Use graph paper or the back of this page.</p>
+<div class="lines" style="min-height:60px"></div>
+</div>
+</section>
+
+</div></body></html>
