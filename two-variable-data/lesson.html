@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two-Variable Data Lesson</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap">
+<style>
+:root{--ink:#1a1a1a;--soft:#5b6470;--rule:#9aa3ad;--light:#d7dde3;--paper:#ffffff;--ans:#b3261e;--tint:#eef3f8;--stim:#2d70b3}
+*{box-sizing:border-box}
+html,body{background:#e9edf1}
+body{margin:0;color:var(--ink);font-family:"Atkinson Hyperlegible",Calibri,Arial,sans-serif;font-size:11.5pt;line-height:1.45}
+.page{background:var(--paper);max-width:8.5in;margin:24px auto;padding:0.6in 0.65in;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+@media (max-width:700px){.page{margin:0;padding:20px 16px;box-shadow:none}}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;font-size:10.5pt}
+.hdr .nd{text-align:right;line-height:2}
+.key{font-weight:700;color:var(--ans);border:2px solid var(--ans);border-radius:4px;padding:2px 10px;letter-spacing:.08em;align-self:center}
+h1{font-size:24pt;font-weight:400;margin:10px 0 4px;padding-bottom:6px;border-bottom:1.5px solid var(--ink)}
+h2{font-size:14pt;color:#2d70b3;font-weight:700;margin:20px 0 8px}
+.min{font-size:9.5pt;color:var(--soft);font-weight:400;margin-left:6px}
+p{margin:6px 0}
+ul,ol{margin:6px 0;padding-left:24px}
+li{margin:4px 0}
+.note{background:var(--tint);padding:8px 12px;border-radius:4px}
+.tw{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;margin:8px 0;font-size:10.5pt;break-inside:avoid}
+table.t th,table.t td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}
+table.t th{background:var(--tint)}
+table.sort td{height:32px}
+table.prac td{height:52px}
+table.nums td{text-align:center;min-width:30px;padding:5px 4px;font-variant-numeric:tabular-nums}
+table.nums th{white-space:nowrap}
+table.small{font-size:9.5pt}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+.gq{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:6px}
+.gq .full{grid-column:1/-1}
+.gq .cap{margin-top:0}
+@media (max-width:640px){.split,.gq{grid-template-columns:minmax(0,1fr)}}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.trio figure{margin:0;text-align:center;font-size:10pt}
+@media (max-width:640px){.trio{grid-template-columns:minmax(0,1fr)}}
+svg.mini{width:100%;max-width:220px;height:auto}
+.sketch{border:1px solid var(--light);border-radius:6px;height:140px;margin:6px 0;max-width:3in;padding:6px}
+.ans{font-family:Kalam,"Comic Sans MS",cursive;color:var(--ans);font-size:12pt;line-height:30px}
+td .ans{line-height:1.3}
+.blank{display:inline-block;border-bottom:1px solid var(--ink);height:1.1em;vertical-align:baseline}
+.lines{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 29px,var(--light) 29px,var(--light) 30px);margin:4px 0 10px;padding:0 4px}
+.gwrap{margin:6px 0 10px;break-inside:avoid;overflow-x:auto}
+svg.graph{width:100%;max-width:520px;height:auto;display:block}
+svg .gl{stroke:#dfe5eb;stroke-width:1}
+svg .ax{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg .brk{stroke:var(--ink);stroke-width:1.6;fill:none;stroke-linejoin:round}
+svg .gt{font-weight:700;font-size:17px;fill:var(--ink)}
+svg .gx{font-size:15px;fill:var(--ink);font-weight:700}
+svg .tk{font-size:14px;fill:var(--ink)}
+svg .hint{font-size:13px;fill:var(--soft)}
+svg .pl{font-size:14px;fill:var(--ans);font-weight:700}
+svg .pl2{font-size:15px;fill:var(--ink);font-weight:700}
+svg .mk{fill:var(--ans);fill-opacity:.28;stroke:var(--ans);stroke-width:1.5}
+svg .dot{fill:var(--ans)}
+svg .sdot{fill:var(--stim)}
+svg .sbar{fill:var(--stim);fill-opacity:.7}
+.keep{break-inside:avoid}
+.ws{border:1.5px dashed var(--ans);border-radius:6px;padding:8px 12px;margin:6px 0 12px;font-size:10.5pt;break-inside:avoid;background:#fff8f7}
+.ws .wsh{font-weight:700;color:var(--ans);font-size:9pt;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.ws p{margin:3px 0}
+.ws .m{font-variant-numeric:tabular-nums;padding-left:14px;line-height:1.5}
+.ws table{border-collapse:collapse;margin:4px 0;font-size:10pt}
+.ws td,.ws th{border:1px solid #e3b9b5;padding:3px 8px;text-align:left;vertical-align:top}
+.lab{border:1.5px solid #2d70b3;border-radius:6px;padding:10px 14px;margin:8px 0;overflow-wrap:anywhere}
+.lab a{color:#2d70b3}
+@page{size:letter;margin:0.55in 0.6in}
+@media print{
+  html,body{background:none}
+  .page{margin:0;padding:0;box-shadow:none;max-width:none}
+  .pb,.pbx{break-before:page}
+  svg.graph{max-width:3.6in}
+  .split svg.graph,.gq svg.graph{max-width:100%}
+  body{font-size:10.5pt}
+  .lines{margin:2px 0 6px}
+  h2{break-after:avoid;margin-top:14px}
+  li{margin:1px 0}
+  table.t th,table.t td{padding:4px 8px}
+  .ans,.ws,svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style></head>
+<body><div class="page">
+
+<header class="hdr">
+  <div>MAP4C<br>Mr. Westcott</div>
+  
+  <div class="nd">Name: <span class="blank" style="min-width:22ch"></span><br>Date: <span class="blank" style="min-width:22ch"></span></div>
+</header>
+<h1>Lesson: Two-Variable Data</h1>
+
+<section>
+<h2>Learning Goals</h2>
+<p>By the end of this lesson I can:</p>
+<ul>
+<li>decide whether a situation needs one-variable or two-variable analysis</li>
+<li>identify the subject, the variable(s), and the independent and dependent variables</li>
+<li>choose a suitable graph, including a scatter plot for two-variable data</li>
+<li>draw a scatter plot and describe its pattern (positive, negative, or no clear trend)</li>
+<li>pose questions that one-variable and two-variable data can answer</li>
+</ul>
+</section>
+
+<section>
+<h2>Warm-up <span class="min">8 min</span></h2>
+<p><b>Review from last class.</b> Classify each variable and name a good graph.</p>
+<table class="t">
+<thead><tr><th>Situation</th><th style="width:22%">Type</th><th style="width:22%">Graph</th></tr></thead>
+<tbody>
+<tr><td>a) Number of siblings of each student</td><td></td><td></td></tr>
+<tr><td>b) Favourite sport of each student</td><td></td><td></td></tr>
+<tr><td>c) Time for each student to run 5 km</td><td></td><td></td></tr>
+</tbody></table>
+<p>d) Suppose we recorded each student's height <i>and</i> shoe size. Can one of these graphs show whether taller students have bigger feet? Explain.</p>
+<div class="lines" style="min-height:30px"></div>
+
+</section>
+
+<section>
+<h2>Part 1: One Variable or Two? <span class="min">15 min</span></h2>
+<table class="t">
+<thead><tr><th style="width:22%">Term</th><th>Meaning</th><th style="width:30%">Example</th></tr></thead>
+<tbody>
+<tr><td><b>Subject</b></td><td></td><td></td></tr>
+<tr><td><b>Variable</b></td><td></td><td></td></tr>
+<tr><td><b>One-variable data</b></td><td></td><td></td></tr>
+<tr><td><b>Two-variable data</b></td><td></td><td></td></tr>
+</tbody></table>
+<p class="note"><b>How to decide:</b> name the subject, then count how many facts are recorded about <i>each</i> subject. One fact → one-variable. Two facts → two-variable. <b>Frequency is not a variable.</b> It counts subjects.</p>
+<p>Graphs for one-variable data: <span class="blank" style="min-width:30ch"></span><br>Graph for two-variable data: <span class="blank" style="min-width:16ch"></span></p>
+
+<div class="pbx"></div>
+<div class="gq keep"><p class="full"><b>Examine each graph.</b> Five households (A to E) were surveyed.</p>
+<div><div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Number of TVs per Household"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Number of TVs per Household</text><text x="300.0" y="288" text-anchor="middle" class="gx">Household</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Number of TVs</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><text x="100.0" y="262" text-anchor="middle" class="tk">A</text><circle cx="100.0" cy="164.0" r="5.5" class="sdot"/><text x="180.0" y="262" text-anchor="middle" class="tk">B</text><circle cx="180.0" cy="204.0" r="5.5" class="sdot"/><text x="260.0" y="262" text-anchor="middle" class="tk">C</text><circle cx="260.0" cy="84.0" r="5.5" class="sdot"/><text x="340.0" y="262" text-anchor="middle" class="tk">D</text><circle cx="340.0" cy="204.0" r="5.5" class="sdot"/><text x="420.0" y="262" text-anchor="middle" class="tk">E</text><circle cx="420.0" cy="124.0" r="5.5" class="sdot"/><text x="52" y="248.0" text-anchor="end" class="tk">0</text><text x="52" y="208.0" text-anchor="end" class="tk">1</text><text x="52" y="168.0" text-anchor="end" class="tk">2</text><text x="52" y="128.0" text-anchor="end" class="tk">3</text><text x="52" y="88.0" text-anchor="end" class="tk">4</text><text x="52" y="48.0" text-anchor="end" class="tk">5</text></svg></div></div>
+<div><p class="cap"><b>Graph 1</b></p>
+<p>a) What does each dot represent?</p><div class="lines" style="min-height:30px"></div>
+<p>b) How many facts are known about each household?</p><div class="lines" style="min-height:30px"></div>
+<p>c) One- or two-variable? Name the variable(s).</p><div class="lines" style="min-height:30px"></div>
+</div></div>
+<div class="gq keep"><div><div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Television Ownership"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Television Ownership</text><text x="300.0" y="288" text-anchor="middle" class="gx">Number of TVs</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Number of households</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><text x="110.0" y="262" text-anchor="middle" class="tk">0</text><rect x="80" y="224.0" width="60" height="20.0" class="sbar"/><text x="190.0" y="262" text-anchor="middle" class="tk">1</text><rect x="160" y="144.0" width="60" height="100.0" class="sbar"/><text x="270.0" y="262" text-anchor="middle" class="tk">2</text><rect x="240" y="84.0" width="60" height="160.0" class="sbar"/><text x="350.0" y="262" text-anchor="middle" class="tk">3</text><rect x="320" y="164.0" width="60" height="80.0" class="sbar"/><text x="430.0" y="262" text-anchor="middle" class="tk">4</text><rect x="400" y="204.0" width="60" height="40.0" class="sbar"/><text x="52" y="248.0" text-anchor="end" class="tk">0</text><text x="52" y="208.0" text-anchor="end" class="tk">2</text><text x="52" y="168.0" text-anchor="end" class="tk">4</text><text x="52" y="128.0" text-anchor="end" class="tk">6</text><text x="52" y="88.0" text-anchor="end" class="tk">8</text><text x="52" y="48.0" text-anchor="end" class="tk">10</text></svg></div></div>
+<div><p class="cap"><b>Graph 2</b> (a different survey of 20 households)</p>
+<p>a) What does each bar represent?</p><div class="lines" style="min-height:30px"></div>
+<p>b) How many facts are known about each household?</p><div class="lines" style="min-height:30px"></div>
+<p>c) One- or two-variable? Name the variable(s).</p><div class="lines" style="min-height:60px"></div>
+</div></div>
+<div class="gq keep"><div><div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Number of TVs and Phones per Household"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Number of TVs and Phones per Household</text><text x="300.0" y="288" text-anchor="middle" class="gx">Number of phones</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Number of TVs</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><text x="60.0" y="262" text-anchor="middle" class="tk">0</text><text x="140.0" y="262" text-anchor="middle" class="tk">1</text><text x="220.0" y="262" text-anchor="middle" class="tk">2</text><text x="300.0" y="262" text-anchor="middle" class="tk">3</text><text x="380.0" y="262" text-anchor="middle" class="tk">4</text><text x="460.0" y="262" text-anchor="middle" class="tk">5</text><text x="52" y="248.0" text-anchor="end" class="tk">0</text><text x="52" y="208.0" text-anchor="end" class="tk">1</text><text x="52" y="168.0" text-anchor="end" class="tk">2</text><text x="52" y="128.0" text-anchor="end" class="tk">3</text><text x="52" y="88.0" text-anchor="end" class="tk">4</text><text x="52" y="48.0" text-anchor="end" class="tk">5</text><circle cx="300.0" cy="164.0" r="5.5" class="sdot"/><text x="309.0" y="157.0" class="pl2">A</text><circle cx="140.0" cy="204.0" r="5.5" class="sdot"/><text x="149.0" y="197.0" class="pl2">B</text><circle cx="380.0" cy="84.0" r="5.5" class="sdot"/><text x="389.0" y="77.0" class="pl2">C</text><circle cx="220.0" cy="204.0" r="5.5" class="sdot"/><text x="229.0" y="197.0" class="pl2">D</text><circle cx="300.0" cy="124.0" r="5.5" class="sdot"/><text x="309.0" y="117.0" class="pl2">E</text></svg></div></div>
+<div><p class="cap"><b>Graph 3</b></p>
+<p>a) What does each point represent?</p><div class="lines" style="min-height:30px"></div>
+<p>b) How many facts are known about each household?</p><div class="lines" style="min-height:30px"></div>
+<p>c) One- or two-variable? Name the variable(s).</p><div class="lines" style="min-height:30px"></div>
+</div></div>
+
+</section>
+
+<section class="pb">
+<h2>Part 2: Scatter Plots <span class="min">17 min</span></h2>
+<p>A <b>scatter plot</b> shows two-variable data. Each point is one subject, placed using its pair of values.</p>
+<table class="t">
+<thead><tr><th style="width:24%"></th><th>Meaning</th><th style="width:22%">Goes on</th></tr></thead>
+<tbody>
+<tr><td><b>Independent variable</b></td><td></td><td></td></tr>
+<tr><td><b>Dependent variable</b></td><td></td><td></td></tr>
+</tbody></table>
+<p><b>Which is independent?</b> Circle the independent variable in each pair.</p>
+<table class="t sort">
+<tbody>
+<tr><td>a) Hours studied &nbsp;·&nbsp; Test mark</td><td style="width:40%"></td></tr>
+<tr><td>b) Price of a used car &nbsp;·&nbsp; Age of the car</td><td></td></tr>
+<tr><td>c) Number of ice cream cones sold &nbsp;·&nbsp; Daily high temperature</td><td></td></tr>
+</tbody></table>
+
+
+<p><b>Example: Physical Activity Survey.</b> Fifteen teenagers gave their age and their hours of physical activity per week.</p>
+<div class="tw"><table class="t nums">
+<tr><th>Age (years)</th><td>14</td><td>16</td><td>17</td><td>15</td><td>18</td><td>19</td><td>19</td><td>18</td><td>13</td><td>15</td><td>16</td><td>16</td><td>16</td><td>14</td><td>17</td></tr>
+<tr><th>Activity (h/week)</th><td>3</td><td>0</td><td>4</td><td>10</td><td>1</td><td>6</td><td>5</td><td>9</td><td>10</td><td>0</td><td>0</td><td>14</td><td>10</td><td>7</td><td>0</td></tr>
+</table></div>
+<div class="split">
+<div>
+<p>a) What do you know about each person?</p><div class="lines" style="min-height:30px"></div>
+<p>b) One- or two-variable? Identify the variables.</p><div class="lines" style="min-height:60px"></div>
+<p>c) Which is the independent variable?</p><div class="lines" style="min-height:30px"></div>
+<p>d) Which graph fits best? Why?</p><div class="lines" style="min-height:60px"></div>
+</div>
+<div class="keep">
+<p>e) Draw the scatter plot. The axes are started for you.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Physical Activity Survey"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Physical Activity Survey</text><text x="300.0" y="288" text-anchor="middle" class="gx">Age (years)</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Activity (hours per week)</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><polyline points="64,244 68,238 72,250 76,244" class="brk"/><text x="80.0" y="262" text-anchor="middle" class="tk">12</text><text x="120.0" y="262" text-anchor="middle" class="tk">13</text><text x="160.0" y="262" text-anchor="middle" class="tk">14</text><text x="200.0" y="262" text-anchor="middle" class="tk">15</text><text x="240.0" y="262" text-anchor="middle" class="tk">16</text><text x="280.0" y="262" text-anchor="middle" class="tk">17</text><text x="320.0" y="262" text-anchor="middle" class="tk">18</text><text x="360.0" y="262" text-anchor="middle" class="tk">19</text><text x="400.0" y="262" text-anchor="middle" class="tk">20</text><text x="52" y="248.0" text-anchor="end" class="tk">0</text><text x="52" y="228.0" text-anchor="end" class="tk">2</text><text x="52" y="208.0" text-anchor="end" class="tk">4</text><text x="52" y="188.0" text-anchor="end" class="tk">6</text><text x="52" y="168.0" text-anchor="end" class="tk">8</text><text x="52" y="148.0" text-anchor="end" class="tk">10</text><text x="52" y="128.0" text-anchor="end" class="tk">12</text><text x="52" y="108.0" text-anchor="end" class="tk">14</text><text x="52" y="88.0" text-anchor="end" class="tk">16</text><text x="60" y="262" text-anchor="middle" class="tk">0</text></svg></div>
+</div>
+</div>
+<p>f) Describe the pattern. Do older teens tend to be more or less active?</p>
+<div class="lines" style="min-height:60px"></div>
+<p>g) Pose one question that needs one-variable analysis and one that needs two-variable analysis.</p>
+<div class="lines" style="min-height:60px"></div>
+
+</section>
+
+<section class="pb">
+<h2>Part 3: Describing a Scatter Plot <span class="min">12 min</span></h2>
+<div class="trio">
+<figure><svg viewBox="0 0 220 160" class="mini" role="img" aria-label="pos trend example"><line x1="20" y1="140" x2="210" y2="140" class="ax"/><line x1="20" y1="10" x2="20" y2="140" class="ax"/><circle cx="27.9" cy="131.1" r="4" class="sdot"/><circle cx="41.0" cy="125.0" r="4" class="sdot"/><circle cx="55.0" cy="104.6" r="4" class="sdot"/><circle cx="62.1" cy="115.6" r="4" class="sdot"/><circle cx="76.1" cy="93.6" r="4" class="sdot"/><circle cx="94.0" cy="91.8" r="4" class="sdot"/><circle cx="104.7" cy="84.4" r="4" class="sdot"/><circle cx="115.1" cy="69.1" r="4" class="sdot"/><circle cx="127.1" cy="78.8" r="4" class="sdot"/><circle cx="138.2" cy="68.3" r="4" class="sdot"/><circle cx="151.4" cy="44.5" r="4" class="sdot"/><circle cx="164.1" cy="49.7" r="4" class="sdot"/><circle cx="172.4" cy="28.7" r="4" class="sdot"/><circle cx="188.9" cy="31.8" r="4" class="sdot"/></svg><figcaption><b>Positive trend</b><br>As x increases, y tends to <span class="blank" style="min-width:10ch"></span>.</figcaption></figure>
+<figure><svg viewBox="0 0 220 160" class="mini" role="img" aria-label="neg trend example"><line x1="20" y1="140" x2="210" y2="140" class="ax"/><line x1="20" y1="10" x2="20" y2="140" class="ax"/><circle cx="31.0" cy="30.8" r="4" class="sdot"/><circle cx="44.4" cy="43.1" r="4" class="sdot"/><circle cx="55.9" cy="50.1" r="4" class="sdot"/><circle cx="62.2" cy="46.7" r="4" class="sdot"/><circle cx="81.5" cy="58.6" r="4" class="sdot"/><circle cx="93.2" cy="53.2" r="4" class="sdot"/><circle cx="101.8" cy="63.9" r="4" class="sdot"/><circle cx="114.4" cy="79.3" r="4" class="sdot"/><circle cx="122.1" cy="78.2" r="4" class="sdot"/><circle cx="136.2" cy="102.5" r="4" class="sdot"/><circle cx="152.1" cy="91.8" r="4" class="sdot"/><circle cx="164.4" cy="98.8" r="4" class="sdot"/><circle cx="174.9" cy="106.0" r="4" class="sdot"/><circle cx="182.0" cy="131.4" r="4" class="sdot"/></svg><figcaption><b>Negative trend</b><br>As x increases, y tends to <span class="blank" style="min-width:10ch"></span>.</figcaption></figure>
+<figure><svg viewBox="0 0 220 160" class="mini" role="img" aria-label="none trend example"><line x1="20" y1="140" x2="210" y2="140" class="ax"/><line x1="20" y1="10" x2="20" y2="140" class="ax"/><circle cx="28.6" cy="40.8" r="4" class="sdot"/><circle cx="43.2" cy="32.6" r="4" class="sdot"/><circle cx="54.3" cy="63.4" r="4" class="sdot"/><circle cx="62.5" cy="78.3" r="4" class="sdot"/><circle cx="74.3" cy="70.5" r="4" class="sdot"/><circle cx="86.6" cy="34.5" r="4" class="sdot"/><circle cx="101.4" cy="111.8" r="4" class="sdot"/><circle cx="111.0" cy="48.4" r="4" class="sdot"/><circle cx="127.0" cy="124.5" r="4" class="sdot"/><circle cx="138.6" cy="66.7" r="4" class="sdot"/><circle cx="153.8" cy="29.9" r="4" class="sdot"/><circle cx="164.9" cy="55.4" r="4" class="sdot"/><circle cx="171.2" cy="37.4" r="4" class="sdot"/><circle cx="184.5" cy="110.7" r="4" class="sdot"/></svg><figcaption><b>No clear trend</b><br>Knowing x does not help predict <span class="blank" style="min-width:6ch"></span>.</figcaption></figure>
+</div>
+<p class="note"><b>Strong</b> trend: points lie close to a line. <b>Weak</b> trend: points are spread out but still lean one way. An <b>outlier</b> is a point far from the pattern of the others.</p>
+
+<p><b>Example: Salt and Blood Pressure.</b> Eight patients in a study. (The recommended maximum is about 6 g of salt, or 1 teaspoon, a day.)</p>
+<div class="tw"><table class="t nums">
+<tr><th>Patient</th><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td></tr>
+<tr><th>Daily salt (g)</th><td>8.4</td><td>10.4</td><td>4.9</td><td>7.8</td><td>12.8</td><td>11.9</td><td>8.4</td><td>11.4</td></tr>
+<tr><th>Systolic BP (mmHg)</th><td>120</td><td>164</td><td>118</td><td>124</td><td>185</td><td>163</td><td>134</td><td>128</td></tr>
+</table></div>
+<div class="split">
+<div>
+<p>a) Identify the independent and dependent variables.</p><div class="lines" style="min-height:60px"></div>
+<p>c) Describe the trend.</p><div class="lines" style="min-height:60px"></div>
+<p>d) Which patient fits the pattern least? Explain.</p><div class="lines" style="min-height:60px"></div>
+</div>
+<div class="keep">
+<p>b) Draw the scatter plot.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Salt Intake and Systolic Blood Pressure"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="280.0" y="24" text-anchor="middle" class="gt">Salt Intake and Systolic Blood Pressure</text><text x="300.0" y="288" text-anchor="middle" class="gx">Daily salt intake (g)</text><text x="18" y="144.0" text-anchor="middle" class="gx" transform="rotate(-90 18 144.0)">Systolic BP (mmHg)</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><polyline points="64,244 68,238 72,250 76,244" class="brk"/><polyline points="60,240 54,236 66,232 60,228" class="brk"/><text x="80.0" y="262" text-anchor="middle" class="tk">4</text><text x="120.0" y="262" text-anchor="middle" class="tk">5</text><text x="160.0" y="262" text-anchor="middle" class="tk">6</text><text x="200.0" y="262" text-anchor="middle" class="tk">7</text><text x="240.0" y="262" text-anchor="middle" class="tk">8</text><text x="280.0" y="262" text-anchor="middle" class="tk">9</text><text x="320.0" y="262" text-anchor="middle" class="tk">10</text><text x="360.0" y="262" text-anchor="middle" class="tk">11</text><text x="400.0" y="262" text-anchor="middle" class="tk">12</text><text x="440.0" y="262" text-anchor="middle" class="tk">13</text><text x="480.0" y="262" text-anchor="middle" class="tk">14</text><text x="52" y="228.0" text-anchor="end" class="tk">100</text><text x="52" y="208.0" text-anchor="end" class="tk">110</text><text x="52" y="188.0" text-anchor="end" class="tk">120</text><text x="52" y="168.0" text-anchor="end" class="tk">130</text><text x="52" y="148.0" text-anchor="end" class="tk">140</text><text x="52" y="128.0" text-anchor="end" class="tk">150</text><text x="52" y="108.0" text-anchor="end" class="tk">160</text><text x="52" y="88.0" text-anchor="end" class="tk">170</text><text x="52" y="68.0" text-anchor="end" class="tk">180</text><text x="52" y="48.0" text-anchor="end" class="tk">190</text><text x="60" y="262" text-anchor="middle" class="tk">0</text></svg></div>
+</div>
+</div>
+<p class="note">A scatter plot shows that two variables are <b>related</b>. On its own it does not prove that one <i>causes</i> the other.</p>
+
+</section>
+
+<section class="pb">
+<h2>Practice <span class="min">18 min</span></h2>
+<p class="note">Do questions 1 to 3 in class. Finish 4 for homework if you run out of time.</p>
+<p><b>1.</b> For each situation, name the subject, decide if the data is one-variable or two-variable, and name the variable(s).</p>
+<table class="t prac">
+<thead><tr><th style="width:36%">Situation</th><th style="width:16%">Subject</th><th style="width:14%">1 or 2?</th><th>Variable(s)</th></tr></thead>
+<tbody>
+<tr><td>a) A class surveys Grade 12 students on time spent on math homework and on English homework.</td><td></td><td></td><td></td></tr>
+<tr><td>b) A market research company records the number of phones sold by each phone company.</td><td></td><td></td><td></td></tr>
+<tr><td>c) A family records the distance driven and the volume of gas used on each trip.</td><td></td><td></td><td></td></tr>
+<tr><td>d) A grocery manager records the volume of organic produce bought from each supplier.</td><td></td><td></td><td></td></tr>
+<tr><td>e) A coach records each player's height and number of rebounds this season.</td><td></td><td></td><td></td></tr>
+</tbody></table>
+
+
+<p><b>2.</b> Name the best graph: bar graph, dot plot, histogram, or scatter plot.</p>
+<table class="t sort">
+<tbody>
+<tr><td>a) Favourite pizza topping of 30 students</td><td style="width:34%"></td></tr>
+<tr><td>b) Heights of 30 students</td><td></td></tr>
+<tr><td>c) Height and arm span of 30 students</td><td></td></tr>
+<tr><td>d) Number of pets in each of 15 households</td><td></td></tr>
+</tbody></table>
+
+
+<p><b>3.</b> Used cars of one model for sale online:</p>
+<div class="tw"><table class="t nums">
+<tr><th>Age (years)</th><td>1</td><td>2</td><td>2</td><td>3</td><td>4</td><td>5</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+<tr><th>Price ($1000s)</th><td>32</td><td>29</td><td>27</td><td>25</td><td>22</td><td>21</td><td>18</td><td>17</td><td>14</td><td>13</td><td>10</td><td>9</td></tr>
+</table></div>
+<div class="split">
+<div>
+<p>a) Which is the independent variable?</p><div class="lines" style="min-height:30px"></div>
+<p>c) Describe the trend.</p><div class="lines" style="min-height:60px"></div>
+<p>d) Use your graph to estimate the price of a 5-year-old car.</p><div class="lines" style="min-height:60px"></div>
+</div>
+<div class="keep">
+<p>b) Draw the scatter plot.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Used Car Age and Price"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/></svg></div>
+</div>
+</div>
+
+
+<p><b>4.</b> Sixteen students' final marks in two courses:</p>
+<div class="tw"><table class="t nums small">
+<tr><th>Student</th><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td></tr>
+<tr><th>Law (%)</th><td>82</td><td>70</td><td>91</td><td>52</td><td>66</td><td>51</td><td>72</td><td>80</td><td>84</td><td>76</td><td>68</td><td>60</td><td>61</td><td>40</td><td>44</td><td>86</td></tr>
+<tr><th>Business (%)</th><td>78</td><td>64</td><td>92</td><td>45</td><td>68</td><td>73</td><td>75</td><td>88</td><td>75</td><td>71</td><td>72</td><td>64</td><td>55</td><td>50</td><td>38</td><td>91</td></tr>
+</table></div>
+<div class="split">
+<div>
+<p>a) Why is a scatter plot better than a double bar graph for this data?</p><div class="lines" style="min-height:90px"></div>
+<p>c) Describe the trend. Is there an outlier?</p><div class="lines" style="min-height:90px"></div>
+<p>d) How many students scored 70% or more in <i>both</i> courses?</p><div class="lines" style="min-height:30px"></div>
+</div>
+<div class="keep">
+<p>b) Draw the scatter plot with Law on the x-axis.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Law and Business Marks"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><polyline points="64,244 68,238 72,250 76,244" class="brk"/><polyline points="60,240 54,236 66,232 60,228" class="brk"/></svg></div>
+</div>
+</div>
+
+</section>
+
+<section class="keep">
+<h2>Exit Ticket <span class="min">5 min</span></h2>
+<p>1. A store records the daily high temperature and the number of ice cream cones sold each day for a month.</p>
+<p>a) One- or two-variable? <span class="blank" style="min-width:14ch"></span> &nbsp; b) Best graph? <span class="blank" style="min-width:14ch"></span> &nbsp; c) Independent variable? <span class="blank" style="min-width:14ch"></span></p>
+<p>2. A gym records the number of visits each member made last month. One- or two-variable? <span class="blank" style="min-width:14ch"></span></p>
+<p>3. Sketch a scatter plot with a <b>negative</b> trend and label the axes "x" and "y".</p>
+<div class="sketch"></div>
+
+</section>
+
+<section class="pb">
+<h2>Homework</h2>
+<div class="lab"><b>1. Online practice: Two-Variable Data Lab</b> (link also posted in Google Classroom)<br>
+<a href="https://ryanwestcott-ops.github.io/map4c-labs/two-variable-data/">https://ryanwestcott-ops.github.io/map4c-labs/two-variable-data/</a><br>
+<b>Done means:</b> all 3 Desmos missions completed, and at least 3 correct in each Practice skill.</div>
+<p><b>2.</b> Use the salt study. Here is the diastolic blood pressure for the same eight patients.</p>
+<div class="tw"><table class="t nums">
+<tr><th>Patient</th><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td></tr>
+<tr><th>Daily salt (g)</th><td>8.4</td><td>10.4</td><td>4.9</td><td>7.8</td><td>12.8</td><td>11.9</td><td>8.4</td><td>11.4</td></tr>
+<tr><th>Systolic BP (mmHg)</th><td>120</td><td>164</td><td>118</td><td>124</td><td>185</td><td>163</td><td>134</td><td>128</td></tr>
+<tr><th>Diastolic BP (mmHg)</th><td>80</td><td>105</td><td>78</td><td>87</td><td>112</td><td>108</td><td>96</td><td>88</td></tr>
+</table></div>
+<p>a) What do you know about each patient? <span class="blank" style="min-width:30ch"></span></p>
+<p>b) How many of the 8 patients eat more than the recommended 6 g of salt a day? What percent is that?</p>
+<div class="lines" style="min-height:90px"></div>
+<div class="keep">
+<p>c) Draw a bar graph of the daily salt intake for each patient. Is this one-variable or two-variable?</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Daily Salt Intake by Patient"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/></svg></div>
+<div class="lines" style="min-height:30px"></div>
+</div>
+<div class="keep">
+<p>d) Draw a scatter plot of daily salt (x) and diastolic blood pressure (y). Describe the trend.</p>
+<div class="gwrap"><svg viewBox="0 0 560 300" class="graph" role="img" aria-label="Salt Intake and Diastolic Blood Pressure"><line x1="60" x2="60" y1="44" y2="244" class="gl"/><line x1="80" x2="80" y1="44" y2="244" class="gl"/><line x1="100" x2="100" y1="44" y2="244" class="gl"/><line x1="120" x2="120" y1="44" y2="244" class="gl"/><line x1="140" x2="140" y1="44" y2="244" class="gl"/><line x1="160" x2="160" y1="44" y2="244" class="gl"/><line x1="180" x2="180" y1="44" y2="244" class="gl"/><line x1="200" x2="200" y1="44" y2="244" class="gl"/><line x1="220" x2="220" y1="44" y2="244" class="gl"/><line x1="240" x2="240" y1="44" y2="244" class="gl"/><line x1="260" x2="260" y1="44" y2="244" class="gl"/><line x1="280" x2="280" y1="44" y2="244" class="gl"/><line x1="300" x2="300" y1="44" y2="244" class="gl"/><line x1="320" x2="320" y1="44" y2="244" class="gl"/><line x1="340" x2="340" y1="44" y2="244" class="gl"/><line x1="360" x2="360" y1="44" y2="244" class="gl"/><line x1="380" x2="380" y1="44" y2="244" class="gl"/><line x1="400" x2="400" y1="44" y2="244" class="gl"/><line x1="420" x2="420" y1="44" y2="244" class="gl"/><line x1="440" x2="440" y1="44" y2="244" class="gl"/><line x1="460" x2="460" y1="44" y2="244" class="gl"/><line x1="480" x2="480" y1="44" y2="244" class="gl"/><line x1="500" x2="500" y1="44" y2="244" class="gl"/><line x1="520" x2="520" y1="44" y2="244" class="gl"/><line x1="540" x2="540" y1="44" y2="244" class="gl"/><line x1="60" x2="540" y1="244" y2="244" class="gl"/><line x1="60" x2="540" y1="224" y2="224" class="gl"/><line x1="60" x2="540" y1="204" y2="204" class="gl"/><line x1="60" x2="540" y1="184" y2="184" class="gl"/><line x1="60" x2="540" y1="164" y2="164" class="gl"/><line x1="60" x2="540" y1="144" y2="144" class="gl"/><line x1="60" x2="540" y1="124" y2="124" class="gl"/><line x1="60" x2="540" y1="104" y2="104" class="gl"/><line x1="60" x2="540" y1="84" y2="84" class="gl"/><line x1="60" x2="540" y1="64" y2="64" class="gl"/><line x1="60" x2="540" y1="44" y2="44" class="gl"/><text x="60" y="24" class="hint">Title: ________________________________</text><line x1="60" x2="540" y1="244" y2="244" class="ax"/><line x1="60" x2="60" y1="44" y2="244" class="ax"/><polyline points="64,244 68,238 72,250 76,244" class="brk"/><polyline points="60,240 54,236 66,232 60,228" class="brk"/></svg></div>
+<div class="lines" style="min-height:30px"></div>
+</div>
+<p>e) Pose one question about this study that needs one-variable analysis and one that needs two-variable analysis.</p>
+<div class="lines" style="min-height:90px"></div>
+<p><b>3. Extension (optional):</b> Measure the height and arm span of 8 people. Record the pairs, draw a scatter plot, and describe the trend. Use graph paper or the back of this page.</p>
+<div class="lines" style="min-height:30px"></div>
+
+</section>
+
+</div></body></html>

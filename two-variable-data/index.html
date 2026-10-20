@@ -329,7 +329,8 @@ function scatterSVG(pts, opts = {}) {
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria || opts.title || 'Scatter plot')}">`;
   if (!opts.bare) {
     for (let v = 0; v <= xmax + 1e-9; v += xstep) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${top}" y2="${base}" stroke="var(--rule)" stroke-width="1"/><text x="${sx(v)}" y="${base + 16}" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${+v.toFixed(2)}</text>`;
-    for (let v = 0; v <= ymax + 1e-9; v += ystep) s += `<line x1="${left}" x2="${right}" y1="${sy(v)}" y2="${sy(v)}" stroke="var(--rule)" stroke-width="1"/><text x="${left - 6}" y="${sy(v) + 4}" text-anchor="end" font-size="11.5" fill="var(--ink-soft)">${+v.toFixed(2)}</text>`;
+    const yl = opts.ylabStep || ystep;
+    for (let v = 0; v <= ymax + 1e-9; v += ystep) s += `<line x1="${left}" x2="${right}" y1="${sy(v)}" y2="${sy(v)}" stroke="var(--rule)" stroke-width="1"/>` + (Math.abs(v / yl - Math.round(v / yl)) < 1e-9 ? `<text x="${left - 6}" y="${sy(v) + 4}" text-anchor="end" font-size="11.5" fill="var(--ink-soft)">${+v.toFixed(2)}</text>` : '');
   }
   s += `<line x1="${left}" x2="${right}" y1="${base}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/><line x1="${left}" x2="${left}" y1="${top}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
   pts.forEach(p => {
@@ -705,7 +706,7 @@ const TF_BANK2 = [
 ];
 const READ_CONTEXTS = [
   {xlab:'Hours studied', ylab:'Test mark (out of 20)', noun:'students', xs:'hours studied', ys:'mark'},
-  {xlab:'Temperature (°C ÷ 3)', ylab:'Cones sold (tens)', noun:'days', xs:'temperature value', ys:'cones value'},
+  {xlab:'Hours worked per week', ylab:'Pay ($10s)', noun:'students', xs:'hours worked', ys:'pay'},
   {xlab:'Practice hours', ylab:'Goals scored', noun:'players', xs:'practice hours', ys:'goals'}
 ];
 let skillFilter = 'all', current = null, lastSkill = null;
@@ -733,7 +734,10 @@ const GEN = {
     const kind = pick(['pos', 'neg', 'none']);
     const label = {pos:'Positive', neg:'Negative', none:'No clear trend'}[kind];
     const why = {pos:'The points rise from left to right: as x increases, y tends to increase.', neg:'The points fall from left to right: as x increases, y tends to decrease.', none:'The points do not rise or fall in one direction.'}[kind];
-    const pts = trendPoints(kind, ri(10, 14));
+    const corr = ps => { const n = ps.length, mx = ps.reduce((a, p) => a + p.x, 0) / n, my = ps.reduce((a, p) => a + p.y, 0) / n; let sxy = 0, sxx = 0, syy = 0; ps.forEach(p => { sxy += (p.x - mx) * (p.y - my); sxx += (p.x - mx) ** 2; syy += (p.y - my) ** 2; }); return sxy / Math.sqrt(sxx * syy); };
+    let pts, r, tries = 0;
+    do { pts = trendPoints(kind, ri(10, 14)); r = corr(pts); tries++; }
+    while (tries < 200 && (kind === 'none' ? Math.abs(r) >= 0.2 : Math.abs(r) < 0.7));
     return {skill:'trend', stim: scatterSVG(pts, {xmax:10, ymax:10, xstep:2, ystep:2, aria:'Scatter plot for the trend question'}), prompt:'Describe the trend in this scatter plot.', mc:['Positive','Negative','No clear trend'], answer: label, why};
   },
   read() {
@@ -757,7 +761,7 @@ const GEN = {
     if (kind === 'countRight') { const k = ri(3, 8); const list = pts.filter(p => p.x >= k); prompt = `How many ${c.noun} have an x-value of <b>${k} or more</b>?`; answer = list.length; why = list.length ? `Points ${list.map(p => p.n).join(', ')} are at x = ${k} or to the right.` : `No points are at x = ${k} or to the right.`; }
     if (kind === 'countAbove') { const k = pick([6, 8, 10, 12, 14]); const list = pts.filter(p => p.y > k); prompt = `How many ${c.noun} have a y-value <b>greater than ${k}</b>?`; answer = list.length; why = list.length ? `Points ${list.map(p => p.n).join(', ')} are above y = ${k}.` : `No points are above y = ${k}.`; }
     const aria = `Scatter plot. ` + pts.map(p => `${p.n} (${p.x}, ${p.y})`).join(', ');
-    return {skill:'read', stim: scatterSVG(pts, {xmax:10, ymax:20, xstep:1, ystep:2, xlab:c.xlab, ylab:c.ylab, aria}), prompt, num:true, answer, why};
+    return {skill:'read', stim: scatterSVG(pts, {xmax:10, ymax:20, xstep:1, ystep:1, ylabStep:2, h:380, xlab:c.xlab, ylab:c.ylab, aria}), prompt, num:true, answer, why};
   },
   tf() {
     const [s, ans, why] = pick(TF_BANK2);
