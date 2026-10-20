@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Two-Variable Data Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: graph-paper lab sheet. Sticky tab bar, one working column; Desmos lab splits into missions + calculator. Palette borrows Desmos' own curve colours. */
+:root{
+  --paper:#f7f9fb; --surface:#ffffff; --ink:#18222e; --ink-soft:#56657a;
+  --grid:rgba(45,112,179,.07); --rule:#d9e1ea;
+  --blue:#2d70b3; --blue-tint:rgba(45,112,179,.10); --field:#8a97a8;
+  --red:#c74440; --green:#2a6e35; --green-tint:rgba(56,140,70,.12);
+  --amber:#9a4d00; --amber-tint:rgba(250,126,25,.14);
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#10151b; --surface:#18202a; --ink:#e7edf4; --ink-soft:#9fb0c2;
+  --grid:rgba(106,166,232,.06); --rule:#2a3542;
+  --blue:#6aa6e8; --blue-tint:rgba(106,166,232,.14);
+  --red:#e57a74; --green:#6cc77a; --green-tint:rgba(108,199,122,.14);
+  --amber:#f5a35a; --amber-tint:rgba(245,163,90,.14); --field:#5f7189; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#10151b; --surface:#18202a; --ink:#e7edf4; --ink-soft:#9fb0c2;
+  --grid:rgba(106,166,232,.06); --rule:#2a3542;
+  --blue:#6aa6e8; --blue-tint:rgba(106,166,232,.14);
+  --red:#e57a74; --green:#6cc77a; --green-tint:rgba(108,199,122,.14);
+  --amber:#f5a35a; --amber-tint:rgba(245,163,90,.14); --field:#5f7189; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+img{max-width:100%}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:800}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+a{color:var(--blue)}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+
+/* header + tabs */
+header.top{background:var(--surface);border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding-block:20px 14px}
+.brand{display:flex;gap:14px;align-items:center}
+.brand svg{flex:none}
+.score{display:flex;gap:10px;align-items:center;font-size:.9rem;color:var(--ink-soft)}
+.score b{font-family:var(--f-display);font-size:1.4rem;color:var(--ink);font-variant-numeric:tabular-nums}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--rule)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+nav.tabs button{font:600 1rem var(--f-display);background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-soft);padding:12px 14px 10px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
+nav.tabs button:hover{color:var(--ink)}
+main{padding-block:28px 64px}
+section.view{display:grid;gap:22px}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:20px;display:grid;gap:12px;min-width:0}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.grid3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.lead{font-size:1.08rem;max-width:65ch;color:var(--ink-soft)}
+.types{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.type{border-left:4px solid var(--c);padding:4px 0 4px 12px;display:grid;gap:4px}
+.type h3{color:var(--c)}
+.type p{font-size:.95rem}
+.type .ex{font-size:.88rem;color:var(--ink-soft)}
+.callout{background:var(--blue-tint);border-radius:8px;padding:12px 14px;font-size:.95rem}
+.gfig{display:grid;gap:6px;min-width:0}
+.gfig svg{width:100%;height:auto;max-width:100%}
+.gfig .cap{font-size:.9rem}
+.gfig .cap b{font-family:var(--f-display)}
+table.ft{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+table.ft th,table.ft td{border:1px solid var(--rule);padding:6px 12px;text-align:left}
+table.ft th{background:var(--blue-tint);font-weight:700}
+.tablewrap{overflow-x:auto}
+ul.starters{margin:0;padding-left:20px;display:grid;gap:4px}
+.cheat{display:grid;gap:8px}
+.cheat div{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr);gap:12px;align-items:baseline;border-bottom:1px dashed var(--rule);padding-bottom:8px}
+@media (max-width:520px){.cheat div{grid-template-columns:1fr;gap:2px}}
+
+/* buttons + inputs */
+.btn{font:700 .95rem var(--f-body);border-radius:8px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);padding:9px 14px;cursor:pointer}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:var(--surface)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+input[type=text],input[type=number]{font:1rem var(--f-body);padding:8px 10px;border:1px solid var(--field);border-radius:8px;background:var(--paper);color:var(--ink);width:110px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:36px;font:600 .9rem var(--f-body);border:1px solid var(--rule);background:var(--surface);color:var(--ink-soft);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.fb{border-radius:8px;padding:10px 12px;font-size:.95rem}
+.fb.ok{background:var(--green-tint);color:var(--ink)}
+.fb.ok b{color:var(--green)}
+.fb.no{background:var(--amber-tint);color:var(--ink)}
+.fb.no b{color:var(--amber)}
+.mc{display:grid;gap:8px}
+.mc button{text-align:left;font:1rem var(--f-body);background:var(--paper);border:1px solid var(--rule);color:var(--ink);border-radius:8px;padding:10px 12px;cursor:pointer}
+.mc button:hover:not(:disabled){border-color:var(--blue)}
+.mc button.right{border-color:var(--green);background:var(--green-tint)}
+.mc button.wrong{border-color:var(--amber);background:var(--amber-tint)}
+
+/* code chips */
+.code{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
+.code pre{margin:0;font-family:var(--f-mono);font-size:.88rem;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:7px 10px;overflow-x:auto;max-width:100%;flex:1 1 auto;min-width:0;user-select:all}
+.code .btn{padding:6px 10px;font-size:.85rem}
+
+/* desmos lab */
+.lab{display:grid;gap:20px;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:start}
+@media (max-width:860px){.lab{grid-template-columns:minmax(0,1fr)}}
+.calcbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);display:grid;gap:10px}
+@media (max-width:860px){.calcbox{position:static;order:-1}}
+#calc{height:500px;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+@media (max-width:560px){#calc{height:400px}}
+#calcFallback{padding:24px;display:grid;gap:12px;align-content:center;height:100%}
+.mission ol{margin:0;padding-left:22px;display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}
+#missionBody{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+#missionBody>*,.mission li{min-width:0}
+#calc.fallback{height:auto}
+details.help summary{cursor:pointer;color:var(--blue);font-weight:700;font-size:.92rem}
+details.help[open] summary{margin-bottom:8px}
+.hint{font-size:.92rem;color:var(--ink-soft)}
+.data{font-family:var(--f-mono);font-size:.9rem;background:var(--paper);border:1px dashed var(--rule);border-radius:6px;padding:8px 10px;overflow-wrap:anywhere}
+.q{display:grid;gap:8px;padding-top:12px;border-top:1px dashed var(--rule)}
+.q label{font-weight:700}
+
+/* practice */
+.prac{display:grid;gap:20px;grid-template-columns:minmax(0,1fr) 260px;align-items:start}
+@media (max-width:860px){.prac{grid-template-columns:minmax(0,1fr)}}
+.qcard{min-height:260px}
+.qcard .stim svg{width:100%;max-width:460px;height:auto}
+.vals{display:flex;flex-wrap:wrap;gap:6px}
+.vals span{font-family:var(--f-mono);font-size:.9rem;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-variant-numeric:tabular-nums}
+.skills{display:grid;gap:10px}
+.skill{display:grid;gap:4px}
+.skill .top{display:flex;justify-content:space-between;font-size:.9rem}
+.skill .n{font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.dots{display:flex;flex-wrap:wrap;gap:3px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--rule)}
+.dots i.on{background:var(--red)}
+footer{font-size:.85rem;color:var(--ink-soft);padding-bottom:32px}
+@media (prefers-reduced-motion:no-preference){.fb{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(-3px);opacity:.4}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><line x1="5" y1="39" x2="41" y2="39" stroke="var(--ink-soft)" stroke-width="2"/><line x1="5" y1="39" x2="5" y2="4" stroke="var(--ink-soft)" stroke-width="2"/><circle cx="11" cy="32" r="3.5" fill="var(--red)"/><circle cx="17" cy="27" r="3.5" fill="var(--red)"/><circle cx="23" cy="25" r="3.5" fill="var(--red)"/><circle cx="28" cy="18" r="3.5" fill="var(--red)"/><circle cx="35" cy="12" r="3.5" fill="var(--red)"/></svg>
+    <div><div class="eyebrow">MAP4C · Mr. Westcott · Data Management</div><h1>Two-Variable Data Lab</h1></div>
+  </div>
+  <div class="score" aria-live="polite"><span>Correct so far</span><b id="totalScore">0</b></div>
+</div></header>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <button type="button" id="tab-learn" data-view="learn" aria-current="page">1 · Review</button>
+  <button type="button" id="tab-desmos" data-view="desmos">2 · Desmos Lab</button>
+  <button type="button" id="tab-practice" data-view="practice">3 · Practice</button>
+</div></nav>
+
+<main class="wrap">
+
+<!-- REVIEW -->
+<section class="view" id="view-learn" aria-labelledby="tab-learn">
+  <div class="card">
+    <h2>One variable or two?</h2>
+    <p class="lead">First name the <b>subject</b>: the person or thing the data is about. Then count how many facts are recorded about <b>each</b> subject.</p>
+    <div class="types">
+      <div class="type" style="--c:var(--blue)"><h3>One-variable</h3><p>One fact per subject.</p><p class="ex">the number of TVs in each household</p></div>
+      <div class="type" style="--c:var(--red)"><h3>Two-variable</h3><p>Two facts per subject, kept together as a pair.</p><p class="ex">the number of TVs <i>and</i> phones in each household</p></div>
+    </div>
+    <div class="callout"><b>Watch out:</b> frequency is not a variable. A bar graph of "how many households own 2 TVs" is still one-variable data: it counts subjects.</div>
+  </div>
+
+  <div class="card">
+    <h2>Independent and dependent variables</h2>
+    <div class="grid2">
+      <div><h3>Independent (x-axis)</h3><p>The variable we think affects the other, or that we know or control first.</p></div>
+      <div><h3>Dependent (y-axis)</h3><p>The variable that responds. It may depend on the other one.</p></div>
+    </div>
+    <div class="tablewrap"><table class="ft"><thead><tr><th>Independent (x)</th><th>Dependent (y)</th></tr></thead><tbody>
+      <tr><td>Hours studied</td><td>Test mark</td></tr>
+      <tr><td>Age of a car</td><td>Price</td></tr>
+      <tr><td>Daily high temperature</td><td>Ice cream cones sold</td></tr>
+    </tbody></table></div>
+    <p class="hint">Ask: which one could change the other? If neither does (like marks in two courses), either axis is fine.</p>
+  </div>
+
+  <div class="card">
+    <h2>Describing a scatter plot</h2>
+    <p>Each point is one subject, placed using its pair of values.</p>
+    <div class="grid3">
+      <figure class="gfig" style="margin:0"><div id="mini-pos"></div><figcaption class="cap"><b>Positive</b>: as x increases, y tends to increase.</figcaption></figure>
+      <figure class="gfig" style="margin:0"><div id="mini-neg"></div><figcaption class="cap"><b>Negative</b>: as x increases, y tends to decrease.</figcaption></figure>
+      <figure class="gfig" style="margin:0"><div id="mini-none"></div><figcaption class="cap"><b>No clear trend</b>: knowing x doesn't help predict y.</figcaption></figure>
+    </div>
+    <div class="callout"><b>Strong</b>: points lie close to a line. <b>Weak</b>: spread out but still leaning one way. <b>Outlier</b>: a point far from the pattern. A scatter plot shows that two variables are related; it does not prove one causes the other.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Which graph?</h2>
+      <div class="tablewrap"><table class="ft"><thead><tr><th>Data</th><th>Usual graph</th></tr></thead><tbody>
+        <tr><td>One categorical variable</td><td>Bar graph</td></tr>
+        <tr><td>One discrete variable, small range</td><td>Dot plot</td></tr>
+        <tr><td>One continuous variable</td><td>Histogram</td></tr>
+        <tr><td>Two numerical variables</td><td>Scatter plot</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>Posing questions</h2>
+      <p><b>One-variable</b> questions use one variable: "What is the most common age?" "How many teens are active 10+ hours a week?"</p>
+      <p><b>Two-variable</b> questions ask how two variables are related: "Do older teens get less activity?" "Does more salt go with higher blood pressure?"</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Desmos cheat sheet</h2>
+    <div class="cheat">
+      <div><code>A=[14,16,17]</code><span>A list of x-values. Square brackets, commas between values.</span></div>
+      <div><code>H=[3,0,4]</code><span>A list of y-values, in the same order.</span></div>
+      <div><code>(A,H)</code><span>Plots the points (14, 3), (16, 0), (17, 4). The first list goes on the x-axis.</span></div>
+      <div><code>length(A)</code><span>How many values are in the list. Both lists must be the same length.</span></div>
+      <div><span class="mono">Wrench icon</span><span>Graph settings: label axes, change the window.</span></div>
+    </div>
+    <div class="row"><button class="btn primary" data-goto="desmos">Go to the Desmos Lab</button></div>
+  </div>
+</section>
+
+<!-- DESMOS LAB -->
+<section class="view" id="view-desmos" aria-labelledby="tab-desmos" hidden>
+  <div class="lab">
+    <div class="card mission" id="missionCard">
+      <div class="chips" id="missionChips" role="group" aria-label="Missions"></div>
+      <div id="missionBody"></div>
+    </div>
+    <div class="calcbox">
+      <div id="calc"></div>
+      <div class="row" id="calcTools">
+        <button class="btn" id="clearCalc">Clear graph</button>
+        <a class="btn" href="https://www.desmos.com/calculator" target="_blank" rel="noopener" style="text-decoration:none">Open Desmos in new tab</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section class="view" id="view-practice" aria-labelledby="tab-practice" hidden>
+  <div class="prac">
+    <div style="display:grid;gap:14px;min-width:0">
+      <div class="chips" id="skillChips" role="group" aria-label="Choose a skill"></div>
+      <div class="card qcard" id="qcard"></div>
+    </div>
+    <aside class="card">
+      <h3>Your progress</h3>
+      <p style="font-size:.88rem;color:var(--ink-soft)">One dot per correct answer. Homework goal: at least 3 in each skill. Saved on this device only.</p>
+      <div class="skills" id="skillList"></div>
+      <button class="btn" id="resetProgress">Reset progress</button>
+      <p id="resetConfirm" class="row" hidden><span style="font-size:.9rem">Erase your dots?</span><button class="btn" id="resetYes">Erase</button><button class="btn" id="resetNo">Keep</button></p>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">Self-check practice. Nothing you enter is sent anywhere. Progress is saved only in this browser.</footer>
+
+<script>
+/* ---------- settings ---------- */
+// Desmos API key for Mr. Westcott's MAP4C labs.
+const DESMOS_API_KEY = 'd6b9d7aea64842e78a255c4556ecc8ce';
+const DESMOS_VERSION = 'v1.10';
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const el = (tag, attrs = {}, html = '') => { const e = document.createElement(tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (html) e.innerHTML = html; return e; };
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const counts = (data, keys) => keys.map(k => data.filter(v => v === k).length);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- storage (best effort) ---------- */
+const SKILLS = [
+  {id:'onetwo', name:'One or two variables?'},
+  {id:'graph', name:'Choose the graph'},
+  {id:'indep', name:'Independent variable'},
+  {id:'trend', name:'Describe the trend'},
+  {id:'read', name:'Read a scatter plot'},
+  {id:'tf', name:'True or false'}
+];
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem('tvdl-progress') || '{}') || {}; } catch (e) { progress = {}; }
+SKILLS.forEach(s => { if (!progress[s.id]) progress[s.id] = {c:0, a:0}; });
+if (!progress.mission) progress.mission = 0;
+const save = () => { try { localStorage.setItem('tvdl-progress', JSON.stringify(progress)); } catch (e) {} };
+function renderScore() {
+  const t = SKILLS.reduce((s, k) => s + progress[k.id].c, 0) + (progress.mission || 0);
+  $('#totalScore').textContent = t;
+  const list = $('#skillList'); if (!list) return;
+  list.innerHTML = '';
+  SKILLS.forEach(s => {
+    const p = progress[s.id];
+    const d = el('div', {class:'skill'});
+    d.innerHTML = `<div class="top"><span>${s.name}</span><span class="n">${p.c} / ${p.a}</span></div><div class="dots">${Array.from({length: Math.max(5, p.c)}, (_, i) => `<i class="${i < p.c ? 'on' : ''}"></i>`).join('')}</div>`;
+    list.appendChild(d);
+  });
+}
+
+/* ---------- SVG graph makers ---------- */
+function scatterSVG(pts, opts = {}) {
+  // pts: [{x, y, n?}] ; axes 0..xmax, 0..ymax with gridlines every xstep / ystep
+  const W = opts.w || 420, H = opts.h || 300, left = opts.bare ? 14 : 46, right = W - 14, top = 16, base = H - (opts.bare ? 14 : 46);
+  const xmax = opts.xmax || 10, ymax = opts.ymax || 10, xstep = opts.xstep || 1, ystep = opts.ystep || 1;
+  const sx = v => left + v / xmax * (right - left), sy = v => base - v / ymax * (base - top);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria || opts.title || 'Scatter plot')}">`;
+  if (!opts.bare) {
+    for (let v = 0; v <= xmax + 1e-9; v += xstep) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${top}" y2="${base}" stroke="var(--rule)" stroke-width="1"/><text x="${sx(v)}" y="${base + 16}" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${+v.toFixed(2)}</text>`;
+    for (let v = 0; v <= ymax + 1e-9; v += ystep) s += `<line x1="${left}" x2="${right}" y1="${sy(v)}" y2="${sy(v)}" stroke="var(--rule)" stroke-width="1"/><text x="${left - 6}" y="${sy(v) + 4}" text-anchor="end" font-size="11.5" fill="var(--ink-soft)">${+v.toFixed(2)}</text>`;
+  }
+  s += `<line x1="${left}" x2="${right}" y1="${base}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/><line x1="${left}" x2="${left}" y1="${top}" y2="${base}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+  pts.forEach(p => {
+    s += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="5" fill="var(--red)"/>`;
+    if (p.n) { const nearRight = sx(p.x) > right - 30; s += `<text x="${sx(p.x) + (nearRight ? -9 : 9)}" y="${sy(p.y) + 4.5}" text-anchor="${nearRight ? 'end' : 'start'}" font-size="13" font-weight="700" fill="var(--ink)">${p.n}</text>`; }
+  });
+  if (opts.xlab) s += `<text x="${(left + right) / 2}" y="${H - 8}" text-anchor="middle" font-size="12.5" fill="var(--ink)">${esc(opts.xlab)}</text>`;
+  if (opts.ylab) s += `<text x="13" y="${(top + base) / 2}" text-anchor="middle" font-size="12.5" fill="var(--ink)" transform="rotate(-90 13 ${(top + base) / 2})">${esc(opts.ylab)}</text>`;
+  return s + '</svg>';
+}
+function trendPoints(kind, n = 12, seed) {
+  let r = seed || Math.random() * 1e6;
+  const rnd = () => { r = (r * 9301 + 49297) % 233280; return r / 233280; };
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const x = 0.6 + i * (9 / (n - 1)) + (rnd() - 0.5) * 0.5;
+    let y;
+    if (kind === 'pos') y = 1 + 0.8 * x + (rnd() - 0.5) * 2.2;
+    else if (kind === 'neg') y = 9 - 0.8 * x + (rnd() - 0.5) * 2.2;
+    else y = 1 + rnd() * 8;
+    pts.push({x: Math.min(9.8, Math.max(0.2, x)), y: Math.min(9.8, Math.max(0.2, y))});
+  }
+  return pts;
+}
+
+/* ---------- review page visuals ---------- */
+$('#mini-pos').innerHTML = scatterSVG(trendPoints('pos', 12, 11), {w: 300, h: 220, bare: true, aria: 'Example of a positive trend'});
+$('#mini-neg').innerHTML = scatterSVG(trendPoints('neg', 12, 23), {w: 300, h: 220, bare: true, aria: 'Example of a negative trend'});
+$('#mini-none').innerHTML = scatterSVG(trendPoints('none', 12, 37), {w: 300, h: 220, bare: true, aria: 'Example with no clear trend'});
+
+/* ---------- tabs ---------- */
+const VIEWS = ['learn', 'desmos', 'practice'];
+function show(view) {
+  if (!VIEWS.includes(view)) view = 'learn';
+  VIEWS.forEach(v => {
+    $('#view-' + v).hidden = v !== view;
+    const t = $('#tab-' + v); if (v === view) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+  });
+  if (view === 'desmos') initDesmos();
+  if (location.hash !== '#' + view) history.replaceState(null, '', '#' + view);
+  window.scrollTo({top: 0});
+}
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => { show(b.dataset.goto); $('#tab-' + b.dataset.goto).focus(); }));
+window.addEventListener('hashchange', () => show((location.hash || '#learn').slice(1)));
+
+/* ---------- copy ---------- */
+function copyText(btn, text, pre) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = t, 1200); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Press Ctrl+C'; setTimeout(() => btn.textContent = 'Copy', 1800); };
+  try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+}
+// plain typing → Desmos LaTeX (named functions need \operatorname, brackets need \left \right)
+const toLatex = t => t
+  .replace(/\b(dotplot|histogram|length)\b/g, '\\operatorname{$1}')
+  .replace(/\(/g, '\\left(').replace(/\)/g, '\\right)')
+  .replace(/\[/g, '\\left[').replace(/\]/g, '\\right]');
+function codeChip(text, opts = {}) {
+  const wrap = el('div', {class:'code'});
+  const pre = el('pre'); pre.textContent = text;
+  const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Copy';
+  b.addEventListener('click', () => copyText(b, text, pre));
+  wrap.append(pre, b);
+  if (opts.send) {
+    const s = el('button', {class:'btn', type:'button', 'data-send':'1'}); s.textContent = 'Put in Desmos';
+    s.addEventListener('click', () => { if (calc) { calc.setExpression({id: opts.id || ('auto' + Math.random().toString(36).slice(2, 7)), latex: toLatex(text)}); s.textContent = 'Added'; setTimeout(() => s.textContent = 'Put in Desmos', 1200); } });
+    wrap.append(s);
+  }
+  return wrap;
+}
+
+/* ---------- desmos ---------- */
+let calc = null, desmosState = 'idle';
+function initDesmos() {
+  if (desmosState !== 'idle') return;
+  desmosState = 'loading';
+  const box = $('#calc');
+  box.innerHTML = '<div id="calcFallback"><p class="eyebrow">Loading Desmos…</p></div>';
+  const s = document.createElement('script');
+  s.src = `https://www.desmos.com/api/${DESMOS_VERSION}/calculator.js?apiKey=${DESMOS_API_KEY}`;
+  s.onload = () => {
+    if (!window.Desmos) return desmosFail();
+    box.innerHTML = '';
+    const dark = document.documentElement.dataset.theme === 'dark' || (document.documentElement.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+    calc = Desmos.GraphingCalculator(box, {keypad: true, expressions: true, settingsMenu: true, border: false, expressionsCollapsed: false, invertedColors: dark});
+    desmosState = 'ready'; box.classList.remove('fallback'); $('#clearCalc').hidden = false;
+    renderMission();
+  };
+  s.onerror = desmosFail;
+  document.head.appendChild(s);
+  setTimeout(() => { if (desmosState === 'loading') desmosFail(); }, 8000);
+}
+function desmosFail() {
+  if (desmosState === 'ready' || desmosState === 'failed') return;
+  desmosState = 'failed';
+  $('#calc').classList.add('fallback');
+  $('#calc').innerHTML = `<div id="calcFallback"><h3>Use Desmos in a new tab</h3><p>The calculator can't load here (your network may block it). Open Desmos, follow the mission steps, then answer the questions here. Use length( ) to check you typed every value.</p><p><a class="btn primary" style="text-decoration:none;display:inline-block" href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Open desmos.com/calculator</a></p><p style="font-size:.9rem;color:var(--ink-soft)">Tip: use the Copy buttons, then paste into Desmos.</p></div>`;
+  $('#clearCalc').hidden = true;
+  renderMission();
+}
+$('#clearCalc').addEventListener('click', () => { if (calc) calc.setBlank(); });
+
+function pointArgs(latex) {
+  // returns [xExpr, yExpr] when the whole expression is a point \left(X,Y\right)
+  const t = latex.trim();
+  if (!t.startsWith('\\left(') || !t.endsWith('\\right)')) return null;
+  const inner = t.slice(6, -7);
+  let depth = 0, cur = '', out = [];
+  for (let j = 0; j < inner.length; j++) {
+    if (inner.startsWith('\\left', j)) { depth++; cur += '\\left'; j += 4; continue; }
+    if (inner.startsWith('\\right', j)) { depth--; cur += '\\right'; j += 5; continue; }
+    const c = inner[j];
+    if (c === ',' && depth === 0) { out.push(cur); cur = ''; continue; }
+    cur += c;
+  }
+  out.push(cur);
+  return out.length === 2 ? out : null;
+}
+function listValueOf(latex) {
+  return new Promise(res => {
+    let h; try { h = calc.HelperExpression({latex}); } catch (e) { return res([]); }
+    let finished = false;
+    const finish = v => { if (finished) return; finished = true; try { h.unobserve('listValue'); } catch (e) {} res(Array.isArray(v) ? v : []); };
+    h.observe('listValue', () => { if (Array.isArray(h.listValue)) finish(h.listValue); });
+    setTimeout(() => finish(h.listValue), 2000);
+  });
+}
+const pairKey = (x, y) => `${(+x).toFixed(4)}|${(+y).toFixed(4)}`;
+function samePairs(xs, ys, m) {
+  if (xs.length !== m.x.length || ys.length !== m.x.length) return false;
+  const want = m.x.map((x, i) => pairKey(x, m.y[i])).sort();
+  const got = xs.map((x, i) => pairKey(x, ys[i])).sort();
+  return want.every((k, i) => k === got[i]);
+}
+async function checkGraph(m, out) {
+  out.className = 'fb'; out.hidden = false; out.textContent = 'Checking your graph…';
+  try {
+    const exprs = calc.getExpressions().filter(e => e.type === 'expression' && e.latex && pointArgs(e.latex));
+    if (!exprs.length) { out.className = 'fb no'; out.innerHTML = `<b>✗ Not yet.</b> I can't find a point list. Add a line like <code>(${m.lx},${m.ly})</code> to plot your two lists.`; return false; }
+    const results = [];
+    for (const e of exprs) {
+      const [a, b] = pointArgs(e.latex);
+      const named = a.trim() === m.lx && b.trim() === m.ly;
+      const xs = await listValueOf(a), ys = await listValueOf(b);
+      if (xs.length && ys.length && samePairs(xs, ys, m)) {
+        out.className = 'fb ok';
+        out.innerHTML = `<b>✓ Data checked.</b> All ${m.x.length} points are plotted with ${esc(m.xname)} on the x-axis. Zoom out if you can't see every point, then answer the questions.`;
+        return true;
+      }
+      let kind;
+      if (!xs.length || !ys.length) kind = 'unreadable';
+      else if (samePairs(ys, xs, m)) kind = 'swapped';
+      else if (xs.length !== m.x.length || ys.length !== m.x.length) kind = 'len';
+      else kind = 'vals';
+      results.push({kind, named, xs, ys});
+    }
+    const order = ['swapped', 'vals', 'len', 'unreadable'];
+    results.sort((r1, r2) => (r2.named - r1.named) || (order.indexOf(r1.kind) - order.indexOf(r2.kind)));
+    const r = results[0] || {};
+    out.className = 'fb no';
+    if (r.kind === 'swapped') out.innerHTML = `<b>✗ Axes switched.</b> Your points are right but reversed. The independent variable (${esc(m.xname)}) goes on the x-axis, so its list goes first: <code>(${m.lx},${m.ly})</code>.`;
+    else if (r.kind === 'vals') out.innerHTML = `<b>✗ Almost.</b> Both lists have ${m.x.length} values, but some pairs don't match the table. Check that each list is in the same order as the table.`;
+    else if (r.kind === 'len') out.innerHTML = `<b>✗ Check your lists.</b> They have ${r.xs.length} and ${r.ys.length} values, but the data has ${m.x.length} pairs. Use length( ) on each list to find the missing or extra number.`;
+    else if (r.kind === 'unreadable') out.innerHTML = `<b>✗ Desmos can't read your lists.</b> Check the square brackets and commas, and that the names inside ( , ) match your list names (capital letters count).`;
+    else out.innerHTML = `<b>✗ Not yet.</b> Plot your lists with <code>(${m.lx},${m.ly})</code>.`;
+    return false;
+  } catch (err) {
+    out.className = 'fb no'; out.innerHTML = '<b>✗ Something went wrong while checking.</b> Wait a second and press Check my graph again.';
+    return false;
+  }
+}
+
+/* ---------- missions ---------- */
+const MISSIONS = [
+  {
+    title: 'Mission 1: Your first scatter plot', short: 'M1 · Guided',
+    intro: 'Fifteen teenagers gave their age and hours of physical activity per week. Age is the independent variable, so it goes on the x-axis. Build the scatter plot, check it, then answer the questions.',
+    lx: 'A', ly: 'H', xname: 'age', table: [['Age (years)', [14,16,17,15,18,19,19,18,13,15,16,16,16,14,17]], ['Activity (h/week)', [3,0,4,10,1,6,5,9,10,0,0,14,10,7,0]]],
+    x: [14,16,17,15,18,19,19,18,13,15,16,16,16,14,17], y: [3,0,4,10,1,6,5,9,10,0,0,14,10,7,0],
+    steps: [
+      ['Make the x-list of ages. Copy this into the first expression box.', 'A=[14,16,17,15,18,19,19,18,13,15,16,16,16,14,17]'],
+      ['Make the y-list of activity hours, in the same order.', 'H=[3,0,4,10,1,6,5,9,10,0,0,14,10,7,0]'],
+      ['Plot the pairs. The x-list goes first.', '(A,H)'],
+      ['Can\'t see the points? Use the zoom buttons or the home button (top right of the graph).', null]
+    ],
+    qs: [
+      {q:'How many teens in the survey are 16 years old?', a:4, why:'There are 4 points above age 16 (at 0, 0, 10 and 14 hours).', hint:'Count the points stacked above 16 on the x-axis.'},
+      {q:'What is the greatest number of hours of activity?', a:14, why:'The highest point is (16, 14).', hint:'Find the highest point and read its y-value.'},
+      {q:'Describe the trend.', mc:['No clear trend','Positive trend','Negative trend'], a:0, why:'At almost every age some teens are very active and some are not. The points do not rise or fall in one direction.', hint:'Do the points rise, fall, or neither as you read left to right?'},
+      {q:'Which question needs two-variable analysis?', mc:['Do older teens get less physical activity?','How many teens are active 10 or more hours?','What is the most common age?'], a:0, why:'It asks how age and activity are related. The other two use only one variable.', hint:'A two-variable question asks how one variable relates to the other.'}
+    ]
+  },
+  {
+    title: 'Mission 2: Salt and blood pressure', short: 'M2 · Scatter',
+    intro: 'Eight patients in a study. Salt intake is the independent variable. Build the scatter plot yourself, check it, then answer the questions.',
+    lx: 'S', ly: 'P', xname: 'salt intake', table: [['Patient', ['A','B','C','D','E','F','G','H']], ['Daily salt (g)', [8.4,10.4,4.9,7.8,12.8,11.9,8.4,11.4]], ['Systolic BP (mmHg)', [120,164,118,124,185,163,134,128]]],
+    x: [8.4,10.4,4.9,7.8,12.8,11.9,8.4,11.4], y: [120,164,118,124,185,163,134,128],
+    steps: [
+      ['Make a list S of daily salt values. Format: S=[8.4,10.4,...]', null],
+      ['Make a list P of systolic blood pressures in the same patient order.', null],
+      ['Plot the pairs with salt first.', '(S,P)'],
+      ['The points are far from the origin. Zoom out, or set the window to x from 0 to 15 and y from 100 to 200 (wrench icon).', null]
+    ],
+    help: ['S=[8.4,10.4,4.9,7.8,12.8,11.9,8.4,11.4]', 'P=[120,164,118,124,185,163,134,128]'],
+    qs: [
+      {q:'Describe the trend.', mc:['Positive trend','Negative trend','No clear trend'], a:0, why:'Patients who eat more salt tend to have higher systolic pressure: the points rise from left to right.', hint:'Compare the points on the left (low salt) with the points on the right (high salt).'},
+      {q:'What is the highest systolic blood pressure in the study?', a:185, why:'Patient E (12.8 g, 185 mmHg) is the highest point.', hint:'Find the highest point and read its y-value.'},
+      {q:'How many patients eat more than the recommended 6 g of salt a day?', a:7, why:'Only patient C (4.9 g) is below 6 g, so 7 of the 8 patients are above.', hint:'Count the points to the right of x = 6.'},
+      {q:'Which patient fits the pattern least?', mc:['Patient H (11.4 g, 128 mmHg)','Patient E (12.8 g, 185 mmHg)','Patient C (4.9 g, 118 mmHg)'], a:0, why:'Other patients near 11 to 12 g have pressures above 160. H has only 128.', hint:'Look for a point well below the others with a similar amount of salt.'}
+    ]
+  },
+  {
+    title: 'Mission 3: Used car prices', short: 'M3 · Scatter',
+    intro: 'Twelve used cars of one model. Build the scatter plot of age (x) and price (y), check it, then answer the questions.',
+    lx: 'Y', ly: 'C', xname: 'age', table: [['Age (years)', [1,2,2,3,4,5,5,6,7,8,9,10]], ['Price ($1000s)', [32,29,27,25,22,21,18,17,14,13,10,9]]],
+    x: [1,2,2,3,4,5,5,6,7,8,9,10], y: [32,29,27,25,22,21,18,17,14,13,10,9],
+    steps: [
+      ['Make a list Y of the ages and a list C of the prices.', null],
+      ['Plot the pairs with age first.', '(Y,C)'],
+      ['Zoom out until you see all 12 points.', null]
+    ],
+    help: ['Y=[1,2,2,3,4,5,5,6,7,8,9,10]', 'C=[32,29,27,25,22,21,18,17,14,13,10,9]'],
+    qs: [
+      {q:'Which is the independent variable?', mc:['Age of the car','Price of the car'], a:0, why:'A car loses value as it ages; the price cannot change the age.', hint:'Which one could change the other?'},
+      {q:'Describe the trend.', mc:['Strong negative','Weak negative','Strong positive','No clear trend'], a:0, why:'Prices fall as cars get older, and the points lie close to a line.', hint:'Do the points fall or rise? Are they close to a line or spread out?'},
+      {q:'Estimate the price of a 5-year-old car.', mc:['About $19 500','About $10 000','About $30 000'], a:0, why:'The two 5-year-old cars cost $21 000 and $18 000, so about $19 500.', hint:'Find the points above x = 5 and read their y-values.'}
+    ]
+  }
+];
+let missionIdx = 0;
+let missionDone = {};
+try { missionDone = JSON.parse(localStorage.getItem('tvdl-missions') || '{}') || {}; } catch (e) {}
+const saveMissions = () => { try { localStorage.setItem('tvdl-missions', JSON.stringify(missionDone)); } catch (e) {} };
+
+function renderMission() {
+  const chips = $('#missionChips'); chips.innerHTML = '';
+  MISSIONS.forEach((m, i) => {
+    const b = el('button', {class:'chip', type:'button', 'aria-pressed': i === missionIdx ? 'true' : 'false'});
+    const doneCount = m.qs.filter((_, k) => missionDone[i + '-' + k]).length;
+    b.textContent = m.short + (doneCount === m.qs.length ? ' ✓' : '');
+    b.addEventListener('click', () => { missionIdx = i; renderMission(); const c = $('#missionChips').children[i]; if (c) c.focus(); });
+    chips.appendChild(b);
+  });
+  const m = MISSIONS[missionIdx], body = $('#missionBody');
+  body.innerHTML = '';
+  body.append(el('h2', {}, esc(m.title)), el('p', {}, esc(m.intro)));
+  body.append(el('div', {class:'eyebrow'}, 'Data'));
+  const tw = el('div', {class:'tablewrap'});
+  tw.innerHTML = `<table class="ft">${m.table.map(([h, vals]) => `<tr><th>${esc(h)}</th>${vals.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</table>`;
+  body.append(tw);
+  const ol = el('ol');
+  m.steps.forEach(([txt, code], k) => {
+    const li = el('li'); li.append(el('div', {}, esc(txt)));
+    if (code) li.append(codeChip(code, {send: desmosState === 'ready', id: `m${missionIdx}s${k}`}));
+    ol.appendChild(li);
+  });
+  body.append(el('div', {class:'eyebrow'}, 'Steps'), ol);
+  if (m.help) {
+    const d = el('details', {class:'help'});
+    d.append(el('summary', {}, 'Stuck typing the lists? Show them to copy'));
+    m.help.forEach((h, k) => d.append(codeChip(h, {send: desmosState === 'ready', id: `m${missionIdx}list${k}`})));
+    body.append(d);
+  }
+  if (desmosState === 'ready') {
+    const out = el('div', {class:'fb', role:'status'}); out.hidden = true;
+    const b = el('button', {class:'btn primary', type:'button'}); b.textContent = 'Check my graph';
+    b.addEventListener('click', () => checkGraph(m, out));
+    const r = el('div', {class:'row'}); r.append(b);
+    body.append(r, out);
+  } else if (desmosState === 'failed') {
+    body.append(el('p', {class:'hint'}, 'Using Desmos in another tab? Check that length( ) is the same for both lists and that you can see every point before you answer.'));
+  }
+  body.append(el('div', {class:'eyebrow'}, 'Questions'));
+  m.qs.forEach((q, k) => body.append(missionQuestion(q, missionIdx + '-' + k)));
+}
+function missionQuestion(q, key) {
+  const box = el('div', {class:'q'});
+  const id = 'mq-' + key;
+  const out = el('div', {class:'fb', role:'status'}); out.hidden = true;
+  const mark = ok => {
+    out.hidden = false; out.className = 'fb ' + (ok ? 'ok' : 'no');
+    out.innerHTML = ok ? `<b>✓ Correct.</b> ${esc(q.why)}` : `<b>✗ Not quite.</b> Hint: ${esc(q.hint || 'Look at your graph again and try once more.')}`;
+    if (ok && !missionDone[key]) { missionDone[key] = true; progress.mission = Object.keys(missionDone).length; saveMissions(); save(); renderScore(); renderMissionChipsOnly(); }
+  };
+  if (q.mc) {
+    box.append(el('p', {id: id + '-q', style:'font-weight:700'}, esc(q.q)));
+    const mc = el('div', {class:'mc', role:'group', 'aria-labelledby': id + '-q'});
+    q.mc.forEach((opt, i) => {
+      const b = el('button', {type:'button'}); b.textContent = opt;
+      b.addEventListener('click', () => {
+        const ok = i === q.a;
+        b.classList.add(ok ? 'right' : 'wrong'); b.textContent = (ok ? '✓ ' : '✗ ') + opt;
+        if (!ok) b.disabled = true;
+        if (ok) [...mc.children].forEach(x => x.disabled = true);
+        mark(ok);
+      });
+      mc.appendChild(b);
+    });
+    if (missionDone[key]) [...mc.children].forEach((x, i) => { x.disabled = true; if (i === q.a) { x.classList.add('right'); x.textContent = '✓ ' + q.mc[i]; } });
+    box.append(mc);
+  } else {
+    box.append(el('label', {for: id}, esc(q.q)));
+    const r = el('div', {class:'row'});
+    const inp = el('input', {type:'number', id, inputmode:'numeric'});
+    const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Check';
+    const go = () => { if (inp.value.trim() === '') return; mark(Number(inp.value) === q.a); };
+    b.addEventListener('click', go);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+    r.append(inp, b); box.append(r);
+  }
+  if (missionDone[key]) { out.hidden = false; out.className = 'fb ok'; out.innerHTML = `<b>✓ Done.</b> ${esc(q.why)}`; }
+  box.append(out);
+  return box;
+}
+function renderMissionChipsOnly() {
+  document.querySelectorAll('#missionChips .chip').forEach((b, i) => {
+    const m = MISSIONS[i]; const doneCount = m.qs.filter((_, k) => missionDone[i + '-' + k]).length;
+    b.textContent = m.short + (doneCount === m.qs.length ? ' ✓' : '');
+  });
+}
+
+/* ---------- practice generators ---------- */
+const ONETWO_BANK = [
+  ['A teacher records each student\'s height.', 'One-variable', 'Each student has one fact recorded: height.'],
+  ['A teacher records each student\'s height and arm span.', 'Two-variable', 'Each student has two facts: height and arm span.'],
+  ['A market research company records the number of phones sold by each company.', 'One-variable', 'The subject is each company, and one number is recorded for it.'],
+  ['A family records the distance driven and the gas used on each trip.', 'Two-variable', 'Each trip has two facts: distance and gas used.'],
+  ['A coach records each player\'s number of goals this season.', 'One-variable', 'Each player has one fact: goals.'],
+  ['A coach records each player\'s shots taken and goals scored.', 'Two-variable', 'Each player has two facts: shots and goals.'],
+  ['A store records the daily high temperature and the number of ice cream cones sold each day.', 'Two-variable', 'Each day has two facts: temperature and cones sold.'],
+  ['A gym records how many visits each member made last month.', 'One-variable', 'Each member has one fact: number of visits.'],
+  ['A bar graph shows how many households own 0, 1, 2, 3 or 4 TVs.', 'One-variable', 'Each household has one fact (number of TVs). Frequency counts households; it is not a second variable.'],
+  ['A nurse records each patient\'s age and resting heart rate.', 'Two-variable', 'Each patient has two facts: age and heart rate.'],
+  ['A survey records each student\'s favourite music genre.', 'One-variable', 'Each student has one fact: favourite genre.'],
+  ['A class records the hours each student studied and their test mark.', 'Two-variable', 'Each student has two facts: hours studied and mark.'],
+  ['A grocery manager records the volume of produce bought from each supplier.', 'One-variable', 'The subject is each supplier, with one fact: volume.'],
+  ['A farmer records the amount of fertilizer and the crop yield for each field.', 'Two-variable', 'Each field has two facts: fertilizer and yield.']
+];
+const GRAPH_BANK2 = [
+  ['Favourite pizza topping of 30 students', 'Bar graph', 'One categorical variable.'],
+  ['Number of pets in each of 15 households', 'Dot plot', 'One discrete variable with a small range.'],
+  ['Heights of 50 students', 'Histogram', 'One continuous variable: group it into intervals.'],
+  ['Height and arm span of 30 students', 'Scatter plot', 'Two numerical variables for each student.'],
+  ['Age and price of 12 used cars', 'Scatter plot', 'Two numerical variables for each car.'],
+  ['Brand of phone owned by 40 people', 'Bar graph', 'One categorical variable.'],
+  ['Hours studied and test mark for 25 students', 'Scatter plot', 'Two numerical variables for each student.'],
+  ['Finish times for 80 runners in a 5 km race', 'Histogram', 'One continuous variable.'],
+  ['Number of goals in each of 20 games', 'Dot plot', 'One discrete variable with a small range.'],
+  ['Daily temperature and ice cream sales for 30 days', 'Scatter plot', 'Two numerical variables for each day.']
+];
+const INDEP_BANK = [
+  ['Hours studied', 'Test mark', 'Studying could raise a mark; a mark can\'t change how long you studied.'],
+  ['Age of a car', 'Price of the car', 'Cars lose value as they age.'],
+  ['Daily high temperature', 'Ice cream cones sold', 'Hot weather sells ice cream, not the other way around.'],
+  ['Hours worked', 'Money earned', 'Pay depends on hours worked.'],
+  ['Amount of fertilizer', 'Crop yield', 'Fertilizer could change the yield.'],
+  ['Distance driven', 'Gas used', 'Driving farther uses more gas.'],
+  ['Daily salt intake', 'Blood pressure', 'Salt could affect blood pressure.'],
+  ['Number of practice free throws', 'Free throws made in a game', 'Practice could improve results.'],
+  ['Outdoor temperature', 'Heating bill', 'Cold weather raises heating costs.']
+];
+const TF_BANK2 = [
+  ['A scatter plot shows two-variable data.', true, 'Each point uses two values from one subject.'],
+  ['Frequency counts as a second variable.', false, 'Frequency counts subjects. It is not a fact about a subject.'],
+  ['The independent variable goes on the x-axis.', true, 'The independent variable is horizontal; the dependent variable is vertical.'],
+  ['A positive trend means y tends to decrease as x increases.', false, 'That is a negative trend. Positive means y tends to increase.'],
+  ['Each point on a scatter plot represents one subject.', true, 'One point per person, car, day, and so on.'],
+  ['If two variables show a strong trend, one must cause the other.', false, 'A scatter plot shows that variables are related, not that one causes the other.'],
+  ['An outlier is a point far from the pattern of the others.', true, 'It does not fit the trend.'],
+  ['A bar graph is the best way to show whether two variables are related.', false, 'Use a scatter plot to see a relationship.'],
+  ['Recording each student\'s height and shoe size gives two-variable data.', true, 'Two facts per student.'],
+  ['In a strong trend the points lie close to a line.', true, 'Weak trends are more spread out.']
+];
+const READ_CONTEXTS = [
+  {xlab:'Hours studied', ylab:'Test mark (out of 20)', noun:'students', xs:'hours studied', ys:'mark'},
+  {xlab:'Temperature (°C ÷ 3)', ylab:'Cones sold (tens)', noun:'days', xs:'temperature value', ys:'cones value'},
+  {xlab:'Practice hours', ylab:'Goals scored', noun:'players', xs:'practice hours', ys:'goals'}
+];
+let skillFilter = 'all', current = null, lastSkill = null;
+function genQuestion() {
+  const pool = skillFilter === 'all' ? SKILLS.map(s => s.id) : [skillFilter];
+  let skill = pick(pool);
+  if (pool.length > 1 && skill === lastSkill) skill = pick(pool.filter(s => s !== lastSkill));
+  lastSkill = skill;
+  return GEN[skill]();
+}
+const GEN = {
+  onetwo() {
+    const [s, ans, why] = pick(ONETWO_BANK);
+    return {skill:'onetwo', prompt:`One-variable or two-variable? <b>${esc(s)}</b>`, mc:['One-variable','Two-variable'], answer: ans, why};
+  },
+  graph() {
+    const [s, ans, why] = pick(GRAPH_BANK2);
+    return {skill:'graph', prompt:`Which graph fits best? <b>${esc(s)}</b>`, mc:['Bar graph','Dot plot','Histogram','Scatter plot'], answer: ans, why};
+  },
+  indep() {
+    const [a, b, why] = pick(INDEP_BANK);
+    return {skill:'indep', prompt:`Which is the <b>independent</b> variable (x-axis)?`, mc: shuffle([a, b]), answer: a, why};
+  },
+  trend() {
+    const kind = pick(['pos', 'neg', 'none']);
+    const label = {pos:'Positive', neg:'Negative', none:'No clear trend'}[kind];
+    const why = {pos:'The points rise from left to right: as x increases, y tends to increase.', neg:'The points fall from left to right: as x increases, y tends to decrease.', none:'The points do not rise or fall in one direction.'}[kind];
+    const pts = trendPoints(kind, ri(10, 14));
+    return {skill:'trend', stim: scatterSVG(pts, {xmax:10, ymax:10, xstep:2, ystep:2, aria:'Scatter plot for the trend question'}), prompt:'Describe the trend in this scatter plot.', mc:['Positive','Negative','No clear trend'], answer: label, why};
+  },
+  read() {
+    const c = pick(READ_CONTEXTS);
+    const n = ri(8, 10), slope = pick([1.4, 1.6, 1.8, -1.4, -1.6]);
+    const pts = [];
+    while (pts.length < n) {
+      const x = ri(1, 10);
+      let y = Math.round((slope > 0 ? 2 + slope * x : 19 + slope * x) + (Math.random() - 0.5) * 4);
+      y = Math.max(1, Math.min(19, y));
+      if (pts.some(q => q.x === x && Math.abs(q.y - y) < 2)) continue;
+      pts.push({x, y});
+    }
+    pts.sort((a, b) => a.x - b.x);
+    const names = 'ABCDEFGHIJ';
+    pts.forEach((p, i) => p.n = names[i]);
+    const kind = pick(['yof', 'xof', 'countRight', 'countAbove']);
+    let prompt, answer, why;
+    if (kind === 'yof') { const p = pick(pts); prompt = `What is the y-value (${c.ys}) of point <b>${p.n}</b>?`; answer = p.y; why = `Point ${p.n} is at (${p.x}, ${p.y}). Read across to the y-axis.`; }
+    if (kind === 'xof') { const p = pick(pts); prompt = `What is the x-value (${c.xs}) of point <b>${p.n}</b>?`; answer = p.x; why = `Point ${p.n} is at (${p.x}, ${p.y}). Read down to the x-axis.`; }
+    if (kind === 'countRight') { const k = ri(3, 8); const list = pts.filter(p => p.x >= k); prompt = `How many ${c.noun} have an x-value of <b>${k} or more</b>?`; answer = list.length; why = list.length ? `Points ${list.map(p => p.n).join(', ')} are at x = ${k} or to the right.` : `No points are at x = ${k} or to the right.`; }
+    if (kind === 'countAbove') { const k = pick([6, 8, 10, 12, 14]); const list = pts.filter(p => p.y > k); prompt = `How many ${c.noun} have a y-value <b>greater than ${k}</b>?`; answer = list.length; why = list.length ? `Points ${list.map(p => p.n).join(', ')} are above y = ${k}.` : `No points are above y = ${k}.`; }
+    const aria = `Scatter plot. ` + pts.map(p => `${p.n} (${p.x}, ${p.y})`).join(', ');
+    return {skill:'read', stim: scatterSVG(pts, {xmax:10, ymax:20, xstep:1, ystep:2, xlab:c.xlab, ylab:c.ylab, aria}), prompt, num:true, answer, why};
+  },
+  tf() {
+    const [s, ans, why] = pick(TF_BANK2);
+    return {skill:'tf', prompt:`True or false? <b>${esc(s)}</b>`, mc:['True','False'], answer: ans ? 'True' : 'False', why};
+  }
+};
+function renderSkillChips() {
+  const box = $('#skillChips'); box.innerHTML = '';
+  [{id:'all', name:'Mixed'}].concat(SKILLS).forEach(s => {
+    const b = el('button', {class:'chip', type:'button', 'aria-pressed': s.id === skillFilter ? 'true' : 'false'});
+    b.textContent = s.name;
+    b.addEventListener('click', () => { skillFilter = s.id; [...box.children].forEach(c => c.setAttribute('aria-pressed', c === b ? 'true' : 'false')); nextQuestion(); });
+    box.appendChild(b);
+  });
+}
+function nextQuestion() { current = genQuestion(); renderQuestion(); }
+function renderQuestion() {
+  const q = current, card = $('#qcard');
+  const sk = SKILLS.find(s => s.id === q.skill).name;
+  card.innerHTML = `<div class="eyebrow">${sk}</div>${q.stim ? `<div class="stim">${q.stim}</div>` : ''}<p style="font-size:1.08rem">${q.prompt}</p>`;
+  const out = el('div', {class:'fb', role:'status'}); out.hidden = true;
+  const next = el('button', {class:'btn primary', type:'button'}); next.textContent = 'Next question'; next.hidden = true;
+  next.addEventListener('click', nextQuestion);
+  let answered = false;
+  const finish = ok => {
+    if (answered) return; answered = true;
+    progress[q.skill].a++; if (ok) progress[q.skill].c++;
+    save(); renderScore();
+    out.hidden = false; out.className = 'fb ' + (ok ? 'ok' : 'no');
+    out.innerHTML = ok ? `<b>✓ Correct.</b> ${esc(q.why)}` : `<b>✗ The answer is ${esc(q.answer)}.</b> ${esc(q.why)}`;
+    next.hidden = false; next.focus();
+  };
+  if (q.mc) {
+    const mc = el('div', {class:'mc'});
+    q.mc.forEach(opt => {
+      const b = el('button', {type:'button'}); b.textContent = opt;
+      b.addEventListener('click', () => {
+        if (answered) return;
+        const ok = opt === q.answer;
+        b.classList.add(ok ? 'right' : 'wrong');
+        if (!ok) [...mc.children].forEach(x => { if (x.textContent === q.answer) { x.classList.add('right'); x.textContent = '✓ ' + x.textContent; } });
+        b.textContent = (ok ? '✓ ' : '✗ ') + opt;
+        [...mc.children].forEach(x => x.disabled = true);
+        finish(ok);
+      });
+      mc.appendChild(b);
+    });
+    card.append(mc);
+  } else {
+    const r = el('div', {class:'row'});
+    const inp = el('input', {type:'number', id:'practiceAnswer', inputmode:'numeric', 'aria-label':'Your answer'});
+    const b = el('button', {class:'btn', type:'button'}); b.textContent = 'Check';
+    const go = () => { if (answered || inp.value.trim() === '') return; inp.disabled = true; b.disabled = true; finish(Number(inp.value) === q.answer); };
+    b.addEventListener('click', go);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+    r.append(inp, b); card.append(r);
+  }
+  card.append(out, next);
+}
+$('#resetProgress').addEventListener('click', () => { $('#resetConfirm').hidden = false; });
+$('#resetNo').addEventListener('click', () => { $('#resetConfirm').hidden = true; });
+$('#resetYes').addEventListener('click', () => {
+  SKILLS.forEach(s => progress[s.id] = {c:0, a:0}); progress.mission = 0; missionDone = {};
+  save(); saveMissions(); renderScore(); $('#resetConfirm').hidden = true;
+  renderMission();
+});
+
+/* ---------- boot ---------- */
+progress.mission = Object.keys(missionDone).length;
+renderScore(); renderSkillChips(); nextQuestion(); renderMission();
+show((location.hash || '#learn').slice(1));
+</script>
+
+</body></html>
